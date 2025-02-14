@@ -1,0 +1,5 @@
+rootProject.name = 'CultureSpot'
+include 'CultureSpot-Api'
+include 'CultureSpot-Domain'
+include 'CultureSpot-Common'
+include 'CultureSpot-Batch'

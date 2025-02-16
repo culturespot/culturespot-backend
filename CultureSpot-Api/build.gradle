@@ -2,7 +2,6 @@ dependencies {
 
     implementation project(':CultureSpot-Domain')
     implementation project(':CultureSpot-Common')
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 }
 
 tasks.register("prepareKotlinBuildScriptModel"){}

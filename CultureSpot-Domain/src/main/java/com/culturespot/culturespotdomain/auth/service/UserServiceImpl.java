@@ -29,13 +29,13 @@ public class UserServiceImpl implements UserService {
       throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
     }
 
-    User user = new User(
-        request.email(),
-        passwordEncoder.encode(request.password()),
-        request.username(),
-        OAuthProvider.LOCAL,
-        UserRole.USER
-    );
+    User user = User.builder()
+        .email(request.email())
+        .password(passwordEncoder.encode(request.password()))
+        .username(request.username())
+        .oAuthProvider(OAuthProvider.LOCAL)
+        .userRoles(UserRole.USER)
+        .build();
 
     userRepository.save(user);
   }

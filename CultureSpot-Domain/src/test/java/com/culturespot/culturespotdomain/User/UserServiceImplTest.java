@@ -32,20 +32,17 @@ class UserServiceImplTest {
   @Test
   void 회원가입_성공() {
     // Given: 유효한 회원가입 요청 DTO
-    SignUpRequestDto requestDto = new SignUpRequestDto();
-    requestDto.setEmail("test@example.com");
-    requestDto.setPassword("password123"); // 패스워드는 8자 이상이여야 함
-    requestDto.setUsername("testuser"); // 닉네임은 2~12자여야 함
+    SignUpRequestDto requestDto = new SignUpRequestDto("test@gmail.com", "password123", "test");
 
     // When
-    System.out.println(requestDto.getEmail());
+    System.out.println(requestDto.email());
     userService.signUp(requestDto);
 
     // Then
-    Optional<User> savedUser = userRepository.findByEmail(requestDto.getEmail());
+    Optional<User> savedUser = userRepository.findByEmail(requestDto.email());
     assertThat(savedUser).isPresent();
-    assertThat(savedUser.get().getEmail()).isEqualTo(requestDto.getEmail());
-    assertThat(savedUser.get().getUsername()).isEqualTo(requestDto.getUsername());
+    assertThat(savedUser.get().getEmail()).isEqualTo(requestDto.email());
+    assertThat(savedUser.get().getUsername()).isEqualTo(requestDto.username());
     assertThat(passwordEncoder.matches("password123", savedUser.get().getPassword())).isTrue();
     assertThat(savedUser.get().getCreatedAt()).isNotNull();
   }
@@ -53,10 +50,7 @@ class UserServiceImplTest {
   @Test
   void 회원가입_실패_중복이메일() {
     // Given: 이미 가입된 이메일
-    SignUpRequestDto requestDto = new SignUpRequestDto();
-    requestDto.setEmail("test@example.com");
-    requestDto.setPassword("password123");
-    requestDto.setUsername("testuser");
+    SignUpRequestDto requestDto = new SignUpRequestDto("test@example.com", "password123", "testuser");
 
     userService.signUp(requestDto);
     userService.signUp(requestDto);
@@ -68,10 +62,7 @@ class UserServiceImplTest {
   @Test
   void 회원가입_실패_패스워드_길이() {
     // Given: 패스워드가 너무 짧음 (최소 8자 필요)
-    SignUpRequestDto requestDto = new SignUpRequestDto();
-    requestDto.setEmail("test@example.com");
-    requestDto.setPassword("sghrt"); // ❌ 너무 짧음
-    requestDto.setUsername("testuser");
+    SignUpRequestDto requestDto = new SignUpRequestDto("test@example.com", "pa23", "testuser");
 
     userService.signUp(requestDto);
 
@@ -82,10 +73,7 @@ class UserServiceImplTest {
   @Test
   void 회원가입_실패_닉네임_길이() {
     // Given: 닉네임이 너무 짧음 (최소 2자 필요)
-    SignUpRequestDto requestDto = new SignUpRequestDto();
-    requestDto.setEmail("test@example.com");
-    requestDto.setPassword("password123");
-    requestDto.setUsername("a"); // ❌ 너무 짧음
+    SignUpRequestDto requestDto = new SignUpRequestDto("test@example.com", "password123", "t");
 
     // When
     userService.signUp(requestDto);
@@ -96,55 +84,43 @@ class UserServiceImplTest {
   @Test
   void 로그인_성공() {
     // Given
-    SignUpRequestDto requestDto = new SignUpRequestDto();
-    requestDto.setEmail("test@example.com");
-    requestDto.setPassword("password123");
-    requestDto.setUsername("testuser");
+    SignUpRequestDto requestDto = new SignUpRequestDto("test@example.com", "password123", "testuser");
 
     userService.signUp(requestDto);
 
-    SignInRequestDto signInRequest = new SignInRequestDto();
-    signInRequest.setEmail("test@example.com");
-    signInRequest.setPassword("password123");
+    SignInRequestDto signInRequest = new SignInRequestDto("test@example.com", "password123");
 
     // When
     UserResponseDto response = userService.signIn(signInRequest);
 
     // Then
-    assertThat(response.getEmail()).isEqualTo(requestDto.getEmail());
-    assertThat(response.getUsername()).isEqualTo(requestDto.getUsername());
+    assertThat(response.email()).isEqualTo(requestDto.email());
+    assertThat(response.username()).isEqualTo(requestDto.username());
   }
 
   @Test
   void 로그인_실패_잘못된_이메일() {
     // Given
-    SignInRequestDto signInRequest = new SignInRequestDto();
-    signInRequest.setEmail("wrong@example.com");
-    signInRequest.setPassword("password123");
+    SignInRequestDto signInRequest = new SignInRequestDto("wrong@example.com", "password123");
 
     // When
     UserResponseDto response = userService.signIn(signInRequest);
     // Then
-    assertThat(response.getEmail()).isEqualTo("wrong@example.com");
+    assertThat(response.email()).isEqualTo("wrong@example.com");
   }
 
   @Test
   void 로그인_실패_잘못된_비밀번호() {
     // Given
-    SignUpRequestDto requestDto = new SignUpRequestDto();
-    requestDto.setEmail("test@example.com");
-    requestDto.setPassword("password123");
-    requestDto.setUsername("testuser");
+    SignUpRequestDto requestDto = new SignUpRequestDto("test@example.com", "password123", "testuser");
 
     userService.signUp(requestDto);
 
-    SignInRequestDto signInRequest = new SignInRequestDto();
-    signInRequest.setEmail("test@example.com");
-    signInRequest.setPassword("wrongpassword"); // ❌ 틀린 비밀번호
+    SignInRequestDto signInRequest = new SignInRequestDto("test@example.com", "wrongpassword");
 
     // When
     UserResponseDto response = userService.signIn(signInRequest);
     // Then
-    assertThat(response.getEmail()).isEqualTo("wrong@example.com");
+    assertThat(response.email()).isEqualTo("wrong@example.com");
   }
 }

@@ -23,13 +23,13 @@ public class User {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @Column(nullable = false, length = 40, unique = true)
+  @Column(nullable = false, unique = true)
   private String email;
 
-  @Column(nullable = false, length = 255)
+  @Column(nullable = false)
   private String password;
 
-  @Column(unique = true, nullable = false, length = 32)
+  @Column(unique = true, nullable = false)
   private String username;
 
   @Enumerated(EnumType.STRING)
@@ -37,7 +37,7 @@ public class User {
   private OAuthProvider oAuthProvider;
 
   @Enumerated(EnumType.STRING)
-  @Column(nullable = false, length = 10)
+  @Column(nullable = false)
   private UserRole userRoles;
 
   @CreatedDate

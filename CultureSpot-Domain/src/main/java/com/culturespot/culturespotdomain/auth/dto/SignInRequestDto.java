@@ -2,7 +2,7 @@ package com.culturespot.culturespotdomain.auth.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
 
 public record SignInRequestDto(
 
@@ -11,6 +11,8 @@ public record SignInRequestDto(
     String email,
 
     @NotBlank(message = "비밀번호를 입력해주세요")
-    @Size(min = 8, message = "비밀번호 길이가 맞지 않습니다.")
+    @Pattern(
+        regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[^A-Za-z\\d가-힣\\s])[A-Za-z\\d[^A-Za-z\\d가-힣\\s]]{8,16}$\n",
+        message = "비밀번호는 8~16자이며, 숫자 최소 1개, 영어 최소 1개, 공백을 제외한 특수문자 최소 1개를 포함해야 합니다.")
     String password
 ) {}

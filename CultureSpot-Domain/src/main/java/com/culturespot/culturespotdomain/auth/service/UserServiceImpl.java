@@ -29,14 +29,6 @@ public class UserServiceImpl implements UserService {
       throw new IllegalArgumentException("이미 사용 중인 닉네임입니다.");
     }
 
-    if (request.username().length() < 2 || 12 < request.username().length()) {
-      throw new IllegalArgumentException("닉네임은 2~12자 사이여야 합니다.");
-    }
-
-    if (request.password().length() < 8) {
-      throw new IllegalArgumentException("비밀번호는 8자 이상이여야 합니다.");
-    }
-
     User user = new User(
         request.email(),
         passwordEncoder.encode(request.password()),

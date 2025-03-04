@@ -1,8 +1,8 @@
 package com.culturespot.culturespotdomain.auth.service;
 
-import com.culturespot.culturespotdomain.auth.dto.SignInRequestDto;
-import com.culturespot.culturespotdomain.auth.dto.SignUpRequestDto;
-import com.culturespot.culturespotdomain.auth.dto.UserResponseDto;
+import com.culturespot.culturespotdomain.auth.dto.local.SignInRequestDto;
+import com.culturespot.culturespotdomain.auth.dto.local.SignUpRequestDto;
+import com.culturespot.culturespotdomain.auth.dto.local.UserResponseDto;
 import com.culturespot.culturespotdomain.auth.entity.User;
 import com.culturespot.culturespotdomain.auth.enums.OAuthProvider;
 import com.culturespot.culturespotdomain.auth.enums.UserRole;

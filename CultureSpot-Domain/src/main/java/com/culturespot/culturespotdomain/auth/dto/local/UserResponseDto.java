@@ -1,4 +1,4 @@
-package com.culturespot.culturespotdomain.auth.dto;
+package com.culturespot.culturespotdomain.auth.dto.local;
 
 public record UserResponseDto (
   String email,

@@ -14,20 +14,25 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
   private final JwtUtil jwtUtil;
+  private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
-
-  public SecurityConfig(JwtUtil jwtUtil) {
+  public SecurityConfig(JwtUtil jwtUtil, OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler) {
     this.jwtUtil = jwtUtil;
+    this.oAuth2LoginSuccessHandler = oAuth2LoginSuccessHandler;
   }
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     http
-        .csrf(csrf -> csrf.disable()) // CSRF 보호 비활성화 (JWT 사용 시 필요 없음)
+        .csrf(csrf -> csrf.disable())
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/", "/api/v1/auth/login", "/api/v1/auth/signin", "/api/v1/auth/signup").permitAll()
+            .requestMatchers("/", "/signin", "/api/v1/auth/signup", "/api/v1/auth/signin", "/oauth2/**").permitAll()
             .anyRequest().authenticated()
+        )
+        .oauth2Login(oauth2 -> oauth2
+            .loginPage("/signin")
+            .defaultSuccessUrl("/api/v1/oauth2/success", true)
         )
         .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 

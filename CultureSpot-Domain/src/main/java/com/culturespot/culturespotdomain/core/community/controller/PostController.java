@@ -4,7 +4,7 @@ import com.culturespot.culturespotdomain.core.auth.annotation.Auth;
 import com.culturespot.culturespotdomain.core.auth.annotation.MemberOnly;
 import com.culturespot.culturespotdomain.core.community.dto.PostCreateRequest;
 import com.culturespot.culturespotdomain.core.community.dto.PostModifyRequest;
-import com.culturespot.culturespotdomain.core.community.dto.PostResponse;
+import com.culturespot.culturespotdomain.core.community.dto.PostSingleResponse;
 import com.culturespot.culturespotdomain.core.community.service.PostService;
 import com.culturespot.culturespotdomain.core.security.endpoint.EndpointPaths;
 import com.culturespot.culturespotdomain.core.user.entity.User;
@@ -20,7 +20,7 @@ public class PostController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(EndpointPaths.PREFIX_PUBLIC + "/posts/{postId}")
-    public PostResponse getPostResponse(
+    public PostSingleResponse getPostResponse(
             @PathVariable Long postId
     ) {
         return postService.getPost(postId);
@@ -45,7 +45,7 @@ public class PostController {
             @PathVariable Long postId,
             @ModelAttribute PostModifyRequest request
     ) {
-        postService.updatePost(user, postId, request);
+        postService.modifyPost(user, postId, request);
     }
 
     @MemberOnly

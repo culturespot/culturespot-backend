@@ -19,8 +19,8 @@ bin/
 
 ### IntelliJ IDEA ###
 # 모든 모듈의 resources 폴더 및 하위 파일 무시
-src/main/resources/
-src/test/resources/
+**/src/main/resources/
+**/src/test/resources/
 
 ### Querydsl generated ###
 CultureSpot-Domain/src/main/generated

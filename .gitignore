@@ -18,18 +18,10 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-CultureSpot-Api/src/main/resources/application.yml
+# 모든 모듈의 resources 폴더 및 하위 파일 무시
+src/main/resources/
+src/test/resources/
 
-CultureSpot-Batch/src/main/resources/application.yml
-
-CultureSpot-Common/src/main/resources/application.yml
-
-CultureSpot-Domain/src/main/resources/application.yml
-CultureSpot-Domain/src/main/resources/application-dev.yml
-CultureSpot-Domain/src/main/resources/application-local.yml
-CultureSpot-Domain/src/main/resources/application-prod.yml
-CultureSpot-Domain/src/main/resources/application-test.yml
-CultureSpot-Domain/src/main/resources/key
 ### Querydsl generated ###
 CultureSpot-Domain/src/main/generated
 

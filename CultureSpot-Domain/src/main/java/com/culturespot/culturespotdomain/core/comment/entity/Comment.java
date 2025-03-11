@@ -1,20 +1,24 @@
 package com.culturespot.culturespotdomain.core.community.entity;
 
+import com.culturespot.culturespotdomain.core.post.entity.Post;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "likes")
-public class Like {
+@Table(name = "comments")
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long likeId;
+    private Long Id;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "postId")
+    @JoinColumn(name = "post_id", nullable = false)
     private Post post;
+
+    @Column
+    private String content;
 }

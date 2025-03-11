@@ -1,4 +1,4 @@
-package com.culturespot.culturespotdomain.core.community.dto;
+package com.culturespot.culturespotdomain.core.post.dto;
 
 import lombok.Builder;
 

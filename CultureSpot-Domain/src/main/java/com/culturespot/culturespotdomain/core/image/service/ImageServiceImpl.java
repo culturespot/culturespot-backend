@@ -1,7 +1,7 @@
 package com.culturespot.culturespotdomain.core.community.service;
 
 import com.culturespot.culturespotdomain.core.community.entity.Image;
-import com.culturespot.culturespotdomain.core.community.entity.Post;
+import com.culturespot.culturespotdomain.core.post.entity.Post;
 import com.culturespot.culturespotdomain.core.community.repository.ImageRepository;
 import com.culturespot.culturespotdomain.core.storage.service.StorageService;
 import com.culturespot.culturespotdomain.core.utils.FileUtils;

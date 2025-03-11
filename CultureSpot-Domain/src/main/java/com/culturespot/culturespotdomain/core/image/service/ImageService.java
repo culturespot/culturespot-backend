@@ -1,7 +1,7 @@
 package com.culturespot.culturespotdomain.core.community.service;
 
 import com.culturespot.culturespotdomain.core.community.entity.Image;
-import com.culturespot.culturespotdomain.core.community.entity.Post;
+import com.culturespot.culturespotdomain.core.post.entity.Post;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

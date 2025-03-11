@@ -1,4 +1,4 @@
-package com.culturespot.culturespotdomain.core.community.validator;
+package com.culturespot.culturespotdomain.core.post.service;
 
 import com.culturespot.culturespotcommon.global.exception.DomainException;
 import com.culturespot.culturespotcommon.global.exception.DomainExceptionCode;

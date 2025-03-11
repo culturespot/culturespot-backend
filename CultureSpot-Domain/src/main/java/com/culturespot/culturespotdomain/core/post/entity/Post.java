@@ -1,5 +1,6 @@
-package com.culturespot.culturespotdomain.core.community.entity;
+package com.culturespot.culturespotdomain.core.post.entity;
 
+import com.culturespot.culturespotdomain.core.image.entity.Image;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,11 +1,11 @@
-package com.culturespot.culturespotdomain.core.community.controller;
+package com.culturespot.culturespotdomain.core.post.controller;
 
 import com.culturespot.culturespotdomain.core.auth.annotation.Auth;
 import com.culturespot.culturespotdomain.core.auth.annotation.MemberOnly;
-import com.culturespot.culturespotdomain.core.community.dto.PostCreateRequest;
-import com.culturespot.culturespotdomain.core.community.dto.PostModifyRequest;
-import com.culturespot.culturespotdomain.core.community.dto.PostSingleResponse;
-import com.culturespot.culturespotdomain.core.community.service.PostService;
+import com.culturespot.culturespotdomain.core.post.dto.PostCreateRequest;
+import com.culturespot.culturespotdomain.core.post.dto.PostModifyRequest;
+import com.culturespot.culturespotdomain.core.post.dto.PostSingleResponse;
+import com.culturespot.culturespotdomain.core.post.service.PostService;
 import com.culturespot.culturespotdomain.core.security.endpoint.EndpointPaths;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import lombok.AllArgsConstructor;

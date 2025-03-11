@@ -1,8 +1,8 @@
-package com.culturespot.culturespotdomain.core.community.service;
+package com.culturespot.culturespotdomain.core.post.service;
 
-import com.culturespot.culturespotdomain.core.community.dto.PostCreateRequest;
-import com.culturespot.culturespotdomain.core.community.dto.PostModifyRequest;
-import com.culturespot.culturespotdomain.core.community.dto.PostSingleResponse;
+import com.culturespot.culturespotdomain.core.post.dto.PostCreateRequest;
+import com.culturespot.culturespotdomain.core.post.dto.PostModifyRequest;
+import com.culturespot.culturespotdomain.core.post.dto.PostSingleResponse;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 
 public interface PostService {

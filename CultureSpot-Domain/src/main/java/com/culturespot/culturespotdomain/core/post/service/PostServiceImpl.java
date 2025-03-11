@@ -1,12 +1,16 @@
-package com.culturespot.culturespotdomain.core.community.service;
+package com.culturespot.culturespotdomain.core.post.service;
 
 import com.culturespot.culturespotcommon.global.exception.DomainException;
 import com.culturespot.culturespotcommon.global.exception.DomainExceptionCode;
-import com.culturespot.culturespotdomain.core.community.dto.*;
-import com.culturespot.culturespotdomain.core.community.entity.Image;
-import com.culturespot.culturespotdomain.core.community.entity.Post;
-import com.culturespot.culturespotdomain.core.community.repository.PostRepository;
-import com.culturespot.culturespotdomain.core.community.validator.PostValidator;
+import com.culturespot.culturespotdomain.core.image.entity.Image;
+import com.culturespot.culturespotdomain.core.image.service.ImageService;
+import com.culturespot.culturespotdomain.core.image.dto.ImageDetailRequest;
+import com.culturespot.culturespotdomain.core.post.entity.Post;
+import com.culturespot.culturespotdomain.core.post.repository.PostRepository;
+import com.culturespot.culturespotdomain.core.post.dto.PostCreateRequest;
+import com.culturespot.culturespotdomain.core.post.dto.PostDetails;
+import com.culturespot.culturespotdomain.core.post.dto.PostModifyRequest;
+import com.culturespot.culturespotdomain.core.post.dto.PostSingleResponse;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotdomain.core.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;

@@ -1,5 +1,6 @@
-package com.culturespot.culturespotdomain.core.community.dto;
+package com.culturespot.culturespotdomain.core.post.dto;
 
+import com.culturespot.culturespotdomain.core.image.dto.ImageDetailRequest;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import org.springframework.web.multipart.MultipartFile;
 

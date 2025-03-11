@@ -1,9 +1,9 @@
 package com.culturespot.culturespotdomain.slice.community.service;
 
-import com.culturespot.culturespotdomain.core.community.entity.Image;
-import com.culturespot.culturespotdomain.core.community.entity.Post;
-import com.culturespot.culturespotdomain.core.community.repository.ImageRepository;
-import com.culturespot.culturespotdomain.core.community.service.ImageServiceImpl;
+import com.culturespot.culturespotdomain.core.image.entity.Image;
+import com.culturespot.culturespotdomain.core.post.entity.Post;
+import com.culturespot.culturespotdomain.core.image.repository.ImageRepository;
+import com.culturespot.culturespotdomain.core.image.service.ImageServiceImpl;
 import com.culturespot.culturespotdomain.core.storage.service.StorageService;
 import com.culturespot.culturespotdomain.core.utils.FileUtils;
 import com.culturespot.culturespotdomain.core.utils.validator.MimeValidator;

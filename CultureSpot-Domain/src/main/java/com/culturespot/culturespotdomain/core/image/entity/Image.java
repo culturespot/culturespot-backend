@@ -1,4 +1,4 @@
-package com.culturespot.culturespotdomain.core.community.entity;
+package com.culturespot.culturespotdomain.core.image.entity;
 
 import com.culturespot.culturespotdomain.core.post.entity.Post;
 import jakarta.persistence.*;

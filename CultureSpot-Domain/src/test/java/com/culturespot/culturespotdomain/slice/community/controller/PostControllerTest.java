@@ -1,8 +1,8 @@
 package com.culturespot.culturespotdomain.slice.community.controller;
 
-import com.culturespot.culturespotdomain.core.community.controller.PostController;
-import com.culturespot.culturespotdomain.core.community.dto.PostCreateRequest;
-import com.culturespot.culturespotdomain.core.community.service.PostService;
+import com.culturespot.culturespotdomain.core.post.controller.PostController;
+import com.culturespot.culturespotdomain.core.post.dto.PostCreateRequest;
+import com.culturespot.culturespotdomain.core.post.service.PostService;
 import com.culturespot.culturespotdomain.core.security.endpoint.EndpointPaths;
 import com.culturespot.culturespotdomain.core.security.jwt.generator.JwtTokenGenerator;
 import com.culturespot.culturespotdomain.core.security.jwt.provider.JwtTokenProvider;

@@ -1,11 +1,14 @@
 package com.culturespot.culturespotdomain.slice.community.service;
 
-import com.culturespot.culturespotdomain.core.community.dto.*;
-import com.culturespot.culturespotdomain.core.community.entity.Post;
-import com.culturespot.culturespotdomain.core.community.repository.PostRepository;
-import com.culturespot.culturespotdomain.core.community.service.ImageService;
-import com.culturespot.culturespotdomain.core.community.service.PostServiceImpl;
-import com.culturespot.culturespotdomain.core.community.validator.PostValidator;
+import com.culturespot.culturespotdomain.core.post.entity.Post;
+import com.culturespot.culturespotdomain.core.post.repository.PostRepository;
+import com.culturespot.culturespotdomain.core.image.service.ImageService;
+import com.culturespot.culturespotdomain.core.post.service.PostServiceImpl;
+import com.culturespot.culturespotdomain.core.post.service.PostValidator;
+import com.culturespot.culturespotdomain.core.post.dto.PostCreateRequest;
+import com.culturespot.culturespotdomain.core.post.dto.PostDetails;
+import com.culturespot.culturespotdomain.core.post.dto.PostModifyRequest;
+import com.culturespot.culturespotdomain.core.post.dto.PostSingleResponse;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotdomain.core.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,4 +1,8 @@
+bootJar.enabled = false
+
 dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation project(':CultureSpot-Common')
 
     runtimeOnly 'com.h2database:h2'
@@ -29,6 +33,14 @@ dependencies {
     implementation group: 'org.apache.tika', name: 'tika-core', version: '3.0.0'
 
 
+    mplementation 'org.springframework:spring-oxm'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api'
+    implementation 'org.glassfish.jaxb:jaxb-runtime'
+
+    implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.2'
+
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.3'
+    implementation 'com.fasterxml:jackson-xml-databind:0.6.2'
 }
 
 def buildDir = layout.buildDirectory.get().asFile

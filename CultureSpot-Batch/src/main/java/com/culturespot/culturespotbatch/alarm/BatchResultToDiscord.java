@@ -1,6 +1,5 @@
 package com.culturespot.culturespotbatch.alarm;
 
-import com.culturespot.culturespotcommon.exception.DiscordException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionListener;

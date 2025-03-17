@@ -1,8 +1,12 @@
 package com.culturespot.culturespotdomain.unit.auth;
 
+import com.culturespot.culturespotcommon.global.exception.AuthException;
 import com.culturespot.culturespotdomain.core.auth.resolver.AuthArgumentResolver;
-import com.culturespot.culturespotdomain.core.security.model.CustomUserDetails;
+import com.culturespot.culturespotdomain.core.auth.userInfo.CustomUserDetails;
+import com.culturespot.culturespotdomain.core.role.entity.Role;
+import com.culturespot.culturespotdomain.core.role.entity.UserRoleType;
 import com.culturespot.culturespotdomain.core.user.entity.User;
+import com.culturespot.culturespotdomain.core.user.entity.UserRole;
 import com.culturespot.culturespotdomain.core.user.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +23,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import org.springframework.core.MethodParameter;
 
+import java.util.HashSet;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -44,17 +49,35 @@ class AuthArgumentResolverTest {
     private SecurityContext securityContext;
 
     private User user;
+    private Role role;
+    private UserRole userRole;
 
     @BeforeEach
     void setUp() {
         // SecurityContextHolder에 Mock SecurityContext 설정
         SecurityContextHolder.setContext(securityContext);
         // 테스트용 User 객체 생성 (빌더 사용)
+        // User 객체 생성 (초기 빈 roles Set 할당)
         user = User.builder()
-                .username("testUser")
+                .email("testUser@gmail.com")
                 .password("password")
-                .role("ROLE_USER")
+                .roles(new HashSet<>())
                 .build();
+
+        // Role 객체 생성
+        role = Role.builder()
+                .roleType(UserRoleType.USER)
+                .build();
+
+        // UserRole 객체 생성 후 User에 추가
+        UserRole userRole = UserRole.builder()
+                .user(user)
+                .role(role)
+                .build();
+
+
+        user.addRole(userRole);
+        user.addRole(userRole);  // 역할 추가
     }
 
     @Test
@@ -75,7 +98,7 @@ class AuthArgumentResolverTest {
         // 실제 데이터베이스를 조회하는 것이 아니라, 가짜 데이터를 반환하는 Mock 동작을 설정.
         // 즉, 컨트롤러에서 User를 주입받을 때 DB 조회가 정상적으로 이루어진다고 가정하는 것.
         // 이 코드가 없으면? -> resolveArgument()에서 userRepository.findByUsername("testUser")가 Optional.empty()를 반환하여 테스트가 실패할 수 있음.
-        when(userRepository.findByUsername("testUser")).thenReturn(Optional.of(user));
+        when(userRepository.findByEmail("testUser@gmail.com")).thenReturn(Optional.of(user));
 
         // When: resolveArgument() 호출
         // 컨트롤러의 인자로 주입될 User 객체를 얻어옴.
@@ -95,7 +118,7 @@ class AuthArgumentResolverTest {
         // 반환된 객체가 User 타입인지 확인
         assertTrue(result instanceof User);
         // 반환된 User 객체의 username이 "testUser"인지 확인
-        assertEquals("testUser", ((User) result).getUsername());
+        assertEquals("testUser@gmail.com", ((User) result).getEmail());
     }
 
     @Test
@@ -105,7 +128,7 @@ class AuthArgumentResolverTest {
         when(securityContext.getAuthentication()).thenReturn(null);
 
         // When & Then: SecurityException 발생 확인
-        assertThrows(SecurityException.class, () ->
+        assertThrows(AuthException.class, () ->
                 authArgumentResolver.resolveArgument(methodParameter,
                         new ModelAndViewContainer(), mock(NativeWebRequest.class), mock(WebDataBinderFactory.class))
         );
@@ -120,7 +143,7 @@ class AuthArgumentResolverTest {
         when(authentication.getPrincipal()).thenReturn("InvalidPrincipal");
 
         // When & Then: SecurityException 발생 확인
-        assertThrows(SecurityException.class, () ->
+        assertThrows(AuthException.class, () ->
                 authArgumentResolver.resolveArgument(methodParameter,
                         new ModelAndViewContainer(), mock(NativeWebRequest.class), mock(WebDataBinderFactory.class))
         );
@@ -135,10 +158,10 @@ class AuthArgumentResolverTest {
         when(securityContext.getAuthentication()).thenReturn(authentication);
         when(authentication.isAuthenticated()).thenReturn(true);
         when(authentication.getPrincipal()).thenReturn(customUserDetails);
-        when(userRepository.findByUsername("testUser")).thenReturn(Optional.empty());
+        when(userRepository.findByEmail("testUser@gmail.com")).thenReturn(Optional.empty());
 
         // When & Then: IllegalArgumentException 발생 확인
-        assertThrows(IllegalArgumentException.class, () ->
+        assertThrows(AuthException.class, () ->
                 authArgumentResolver.resolveArgument(methodParameter,
                         new ModelAndViewContainer(), mock(NativeWebRequest.class), mock(WebDataBinderFactory.class))
         );

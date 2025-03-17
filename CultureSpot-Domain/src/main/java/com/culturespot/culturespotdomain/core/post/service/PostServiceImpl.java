@@ -12,7 +12,7 @@ import com.culturespot.culturespotdomain.core.post.dto.PostDetails;
 import com.culturespot.culturespotdomain.core.post.dto.PostModifyRequest;
 import com.culturespot.culturespotdomain.core.post.dto.PostSingleResponse;
 import com.culturespot.culturespotdomain.core.user.entity.User;
-import com.culturespot.culturespotdomain.core.user.repository.UserRepository;
+import com.culturespot.culturespotdomain.core.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,9 +23,9 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
-    private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final ImageService imageService;
+    private final UserService userService;
 
     @Override
     @Transactional(readOnly = true)
@@ -37,7 +37,7 @@ public class PostServiceImpl implements PostService {
     @Override
     @Transactional
     public void createPost(User user, PostCreateRequest request) {
-        User findUser = findUserOrThrow(user.getUsername());
+        User findUser = userService.findUserOrThrow(user.getEmail());
 
         PostDetails postDetails = request.post();
         Post post = createEmptyPost(findUser, postDetails);
@@ -109,11 +109,5 @@ public class PostServiceImpl implements PostService {
         }
 
         return post;
-    }
-
-    // UserService로 옮기는거 고민하기
-    public User findUserOrThrow(String username) {
-        return userRepository.findByUsername(username)
-                .orElseThrow(() -> new DomainException(DomainExceptionCode.USER_NOT_FOUND));
     }
 }

@@ -25,7 +25,7 @@ public record PostSingleResponse(
 
         return PostSingleResponse.builder()
                 .postDetails(PostDetailsResponse.builder()
-                        .nickname(post.getUser().getUsername())
+                        .nickname(post.getUser().getEmail())
                         .createdAt(post.getCreatedAt())
                         .viewCount(post.getViewCount())
                         .title(post.getTitle())

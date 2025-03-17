@@ -1,7 +1,7 @@
 package com.culturespot.culturespotdomain.slice.storage.service;
 
-import com.culturespot.culturespotdomain.core.storage.property.MinioProperty;
-import com.culturespot.culturespotdomain.core.storage.service.MinioStorageService;
+import com.culturespot.culturespotdomain.core.global.infrastructure.storage.property.MinioProperty;
+import com.culturespot.culturespotdomain.core.global.infrastructure.storage.service.MinioStorageService;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.RemoveObjectArgs;

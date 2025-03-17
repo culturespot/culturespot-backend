@@ -2,11 +2,11 @@ package com.culturespot.culturespotdomain.core.post.controller;
 
 import com.culturespot.culturespotdomain.core.auth.annotation.Auth;
 import com.culturespot.culturespotdomain.core.auth.annotation.MemberOnly;
+import com.culturespot.culturespotdomain.core.global.security.endpoint.EndpointType;
 import com.culturespot.culturespotdomain.core.post.dto.PostCreateRequest;
 import com.culturespot.culturespotdomain.core.post.dto.PostModifyRequest;
 import com.culturespot.culturespotdomain.core.post.dto.PostSingleResponse;
 import com.culturespot.culturespotdomain.core.post.service.PostService;
-import com.culturespot.culturespotdomain.core.security.endpoint.EndpointPaths;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class PostController {
     private final PostService postService;
 
     @ResponseStatus(HttpStatus.OK)
-    @GetMapping(EndpointPaths.PREFIX_PUBLIC + "/posts/{postId}")
+    @GetMapping(EndpointType.PUBLIC_PATH + "/posts/{postId}")
     public PostSingleResponse getPostResponse(
             @PathVariable Long postId
     ) {
@@ -29,7 +29,7 @@ public class PostController {
 
     @MemberOnly
     @ResponseStatus(HttpStatus.CREATED)
-    @PostMapping(EndpointPaths.PREFIX_USER_AUTHENTICATED + "/posts")
+    @PostMapping(EndpointType.USER_PATH + "/posts")
     public void createPost(
             @Auth User user,
             @ModelAttribute PostCreateRequest request
@@ -39,7 +39,7 @@ public class PostController {
 
     @MemberOnly
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PatchMapping(EndpointPaths.PREFIX_USER_AUTHENTICATED + "/posts/{postId}")
+    @PatchMapping(EndpointType.USER_PATH + "/posts/{postId}")
     public void modifyPost(
             @Auth User user,
             @PathVariable Long postId,
@@ -50,7 +50,7 @@ public class PostController {
 
     @MemberOnly
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @DeleteMapping(EndpointPaths.PREFIX_USER_AUTHENTICATED + "/posts/{postId}")
+    @DeleteMapping(EndpointType.USER_PATH + "/posts/{postId}")
     public void deletePost(
             @Auth User user,
             @PathVariable Long postId

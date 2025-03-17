@@ -1,5 +1,7 @@
 package com.culturespot.culturespotdomain.core.auth.resolver;
 
+import com.culturespot.culturespotcommon.global.exception.AuthException;
+import com.culturespot.culturespotcommon.global.exception.AuthExceptionCode;
 import com.culturespot.culturespotdomain.core.auth.annotation.Auth;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotdomain.core.user.repository.UserRepository;
@@ -29,21 +31,25 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
-                                  NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
+    public Object resolveArgument(
+            MethodParameter parameter,
+            ModelAndViewContainer mavContainer,
+            NativeWebRequest webRequest,
+            WebDataBinderFactory binderFactory
+    ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
-            throw new SecurityException("인증된 사용자만 접근 가능합니다.");
+            throw new AuthException(AuthExceptionCode.UNAUTHENTICATED_USER);
         }
 
-        // ✅ 현재 인증된 사용자가 UserDetails인지 확인
+        // 현재 인증된 사용자가 UserDetails인지 확인
         Object principal = authentication.getPrincipal();
         if (principal instanceof UserDetails userDetails) {
-            return userRepository.findByUsername(userDetails.getUsername())
-                    .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+            return userRepository.findByEmail(userDetails.getUsername())
+                    .orElseThrow(() -> new AuthException(AuthExceptionCode.USER_NOT_FOUND));
         }
 
-        throw new SecurityException("잘못된 인증 정보입니다.");
+        throw new AuthException(AuthExceptionCode.INVALID_AUTHENTICATION);
     }
 }

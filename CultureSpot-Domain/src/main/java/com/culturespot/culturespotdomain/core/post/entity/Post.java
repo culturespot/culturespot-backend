@@ -16,8 +16,9 @@ import java.util.List;
 @Entity
 @Table(name = "posts")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(AuditingEntityListener.class)  // Auditing 활성화
+@EntityListeners(AuditingEntityListener.class)
 public class Post {
+    // ************************ column ************************ //
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long postId;
@@ -48,6 +49,7 @@ public class Post {
     @LastModifiedDate
     @Column(nullable = false)
     private LocalDateTime modifiedAt;
+    // ************************ column ************************ //
 
     @Builder
     public Post(User user, List<Image> images, String title, String content) {

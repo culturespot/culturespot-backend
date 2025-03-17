@@ -13,6 +13,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     testImplementation 'org.springframework.security:spring-security-test'
 
+    // OAuth 2.0
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
     // QueryDSL 설정
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
@@ -27,8 +30,6 @@ dependencies {
 
     // Tika : MIME타입 검사
     implementation group: 'org.apache.tika', name: 'tika-core', version: '3.0.0'
-
-
 }
 
 def buildDir = layout.buildDirectory.get().asFile

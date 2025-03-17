@@ -18,9 +18,22 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-# 모든 모듈의 resources 폴더 및 하위 파일 무시
+# 모든 모듈의 resources 폴더 및 하위 파일 무시 (기본 베이스)
 **/src/main/resources/
 **/src/test/resources/
+
+# CultureSpot-Domain 모듈 applcation.yml 무시 예외
+!CultureSpot-Domain/src/main/resources/application.yml
+!CultureSpot-Domain/src/main/resources/application-dev.yml
+!CultureSpot-Domain/src/main/resources/application-prod.yml
+!CultureSpot-Domain/src/main/resources/application-test.yml
+
+# domain-module.env
+domain-module.env
+
+# key 및 sql 디렉터리 무시
+src/main/resources/key/
+src/main/resources/sql/
 
 ### Querydsl generated ###
 CultureSpot-Domain/src/main/generated

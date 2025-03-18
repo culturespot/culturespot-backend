@@ -1,0 +1,12 @@
+storage:
+  type: s3
+
+spring:
+  aws:
+    region:
+      static: ${DEV_AWS_REGION}
+    credentials:
+      access-key: ${DEV_AWS_ACCESS_KEY}
+      secret-key: ${DEV_AWS_SECRET_KEY}
+    s3:
+      bucket-name: ${DEV_S3_BUCKET_NAME}

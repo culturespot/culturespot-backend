@@ -3,18 +3,14 @@ dependencies {
 
     runtimeOnly 'com.h2database:h2'
     implementation 'mysql:mysql-connector-java:8.0.33'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    api 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-impl:0.11.5'
     implementation 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-    // Spring Security
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    testImplementation 'org.springframework.security:spring-security-test'
-
-    // OAuth 2.0
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    // Spring Security core (PasswordEncoder 의존성 사용하기 위함)
+    implementation 'org.springframework.security:spring-security-core:5.8.1'
 
     // QueryDSL 설정
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
@@ -30,6 +26,15 @@ dependencies {
 
     // Tika : MIME타입 검사
     implementation group: 'org.apache.tika', name: 'tika-core', version: '3.0.0'
+
+    // JUnit 5
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.9.2'
+
+    // Mockito 기본
+    testImplementation 'org.mockito:mockito-core:5.2.0'
+
+    // Mockito JUnit 5 연동
+    testImplementation 'org.mockito:mockito-junit-jupiter:5.2.0'
 }
 
 def buildDir = layout.buildDirectory.get().asFile

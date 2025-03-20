@@ -1,7 +1,7 @@
-package com.culturespot.culturespotdomain.core.global.security.token;
+package com.culturespot.culturespotdomain.core.global.jwt;
 
-import com.culturespot.culturespotcommon.global.exception.AuthException;
-import com.culturespot.culturespotcommon.global.exception.AuthExceptionCode;
+import com.culturespot.culturespotdomain.core.global.exception.AuthException;
+import com.culturespot.culturespotdomain.core.global.exception.AuthExceptionCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;

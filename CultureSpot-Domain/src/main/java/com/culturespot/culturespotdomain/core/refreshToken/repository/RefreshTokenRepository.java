@@ -1,6 +1,6 @@
-package com.culturespot.culturespotdomain.core.auth.repository;
+package com.culturespot.culturespotdomain.core.refreshToken.repository;
 
-import com.culturespot.culturespotdomain.core.auth.entity.RefreshToken;
+import com.culturespot.culturespotdomain.core.refreshToken.entity.RefreshToken;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;

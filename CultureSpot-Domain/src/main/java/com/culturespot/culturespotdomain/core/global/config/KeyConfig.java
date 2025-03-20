@@ -1,6 +1,6 @@
-package com.culturespot.culturespotdomain.core.global.security.config;
+package com.culturespot.culturespotdomain.core.global.config;
 
-import com.culturespot.culturespotdomain.core.global.security.token.KeyBuilder;
+import com.culturespot.culturespotdomain.core.global.jwt.KeyBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

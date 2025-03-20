@@ -1,4 +1,4 @@
-package com.culturespot.culturespotdomain.core.global.security.token;
+package com.culturespot.culturespotdomain.core.global.jwt;
 
 import lombok.extern.slf4j.Slf4j;
 

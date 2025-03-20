@@ -1,6 +1,6 @@
-package com.culturespot.culturespotdomain.core.auth.service;
+package com.culturespot.culturespotdomain.core.refreshToken.service;
 
-import com.culturespot.culturespotdomain.core.auth.entity.RefreshToken;
+import com.culturespot.culturespotdomain.core.refreshToken.entity.RefreshToken;
 import com.culturespot.culturespotdomain.core.user.entity.SocialLoginType;
 
 public interface RefreshTokenService {

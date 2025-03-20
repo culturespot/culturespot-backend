@@ -1,4 +1,4 @@
-package com.culturespot.culturespotdomain.core.global.security.token;
+package com.culturespot.culturespotdomain.core.global.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

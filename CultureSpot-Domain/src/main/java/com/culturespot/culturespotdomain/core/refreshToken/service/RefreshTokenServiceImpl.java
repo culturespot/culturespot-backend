@@ -1,9 +1,9 @@
-package com.culturespot.culturespotdomain.core.auth.service;
+package com.culturespot.culturespotdomain.core.refreshToken.service;
 
-import com.culturespot.culturespotdomain.core.auth.entity.RefreshToken;
-import com.culturespot.culturespotdomain.core.auth.repository.RefreshTokenRepository;
+import com.culturespot.culturespotdomain.core.global.jwt.JwtTokenManager;
+import com.culturespot.culturespotdomain.core.refreshToken.entity.RefreshToken;
+import com.culturespot.culturespotdomain.core.refreshToken.repository.RefreshTokenRepository;
 import com.culturespot.culturespotdomain.core.user.entity.SocialLoginType;
-import com.culturespot.culturespotdomain.core.global.security.token.JwtTokenManager;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotdomain.core.user.service.UserService;
 import lombok.AllArgsConstructor;

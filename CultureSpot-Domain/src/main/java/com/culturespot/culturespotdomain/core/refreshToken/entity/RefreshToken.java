@@ -1,4 +1,4 @@
-package com.culturespot.culturespotdomain.core.auth.entity;
+package com.culturespot.culturespotdomain.core.refreshToken.entity;
 
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import jakarta.persistence.*;

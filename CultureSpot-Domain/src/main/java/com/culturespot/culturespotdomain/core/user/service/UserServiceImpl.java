@@ -1,7 +1,7 @@
 package com.culturespot.culturespotdomain.core.user.service;
 
-import com.culturespot.culturespotcommon.global.exception.AuthException;
-import com.culturespot.culturespotcommon.global.exception.AuthExceptionCode;
+import com.culturespot.culturespotdomain.core.global.exception.AuthException;
+import com.culturespot.culturespotdomain.core.global.exception.AuthExceptionCode;
 import com.culturespot.culturespotdomain.core.user.entity.SocialLoginType;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotdomain.core.user.repository.UserRepository;

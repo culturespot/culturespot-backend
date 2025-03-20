@@ -1,4 +1,4 @@
-package com.culturespot.culturespotcommon.global.exception;
+package com.culturespot.culturespotdomain.core.global.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

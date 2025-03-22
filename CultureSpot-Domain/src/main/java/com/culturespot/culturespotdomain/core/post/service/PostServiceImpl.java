@@ -1,7 +1,7 @@
 package com.culturespot.culturespotdomain.core.post.service;
 
-import com.culturespot.culturespotcommon.global.exception.DomainException;
-import com.culturespot.culturespotcommon.global.exception.DomainExceptionCode;
+import com.culturespot.culturespotdomain.core.global.exception.DomainException;
+import com.culturespot.culturespotdomain.core.global.exception.DomainExceptionCode;
 import com.culturespot.culturespotdomain.core.image.entity.Image;
 import com.culturespot.culturespotdomain.core.image.service.ImageService;
 import com.culturespot.culturespotdomain.core.image.dto.ImageDetailRequest;

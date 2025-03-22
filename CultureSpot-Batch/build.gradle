@@ -1,7 +1,6 @@
 dependencies {
 
     implementation project(':CultureSpot-Domain')
-    implementation project(':CultureSpot-Common')
 }
 
 tasks.register("prepareKotlinBuildScriptModel"){}

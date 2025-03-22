@@ -1,7 +1,7 @@
 package com.culturespot.culturespotdomain.core.global.infrastructure.storage.service;
 
-import com.culturespot.culturespotcommon.global.exception.DomainException;
-import com.culturespot.culturespotcommon.global.exception.DomainExceptionCode;
+import com.culturespot.culturespotdomain.core.global.exception.DomainException;
+import com.culturespot.culturespotdomain.core.global.exception.DomainExceptionCode;
 import com.culturespot.culturespotdomain.core.global.infrastructure.storage.property.MinioProperty;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;

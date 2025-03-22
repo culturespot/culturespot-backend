@@ -1,7 +1,7 @@
 package com.culturespot.culturespotdomain.core.image.dto;
 
-import com.culturespot.culturespotdomain.core.image.entity.Image;
 import com.culturespot.culturespotdomain.core.global.config.StorageBasePaths;
+import com.culturespot.culturespotdomain.core.image.entity.Image;
 import lombok.Builder;
 
 @Builder

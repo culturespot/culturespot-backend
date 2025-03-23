@@ -29,7 +29,8 @@ bin/
 !CultureSpot-Domain/src/main/resources/application-test.yml
 
 # domain-module.env
-domain-module.env
+env/domain-module.env
+env/serviceApi-module.env
 
 # key 및 sql 디렉터리 무시
 src/main/resources/key/

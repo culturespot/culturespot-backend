@@ -3,7 +3,6 @@ bootJar.enabled = false
 dependencies {
 
     implementation project(':CultureSpot-Domain')
-    implementation project(':CultureSpot-Common')
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
     implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.2'

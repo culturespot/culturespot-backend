@@ -23,10 +23,10 @@ bin/
 **/src/test/resources/
 
 # CultureSpot-Domain 모듈 applcation.yml 무시 예외
-!CultureSpot-Domain/src/main/resources/application.yml
-!CultureSpot-Domain/src/main/resources/application-dev.yml
-!CultureSpot-Domain/src/main/resources/application-prod.yml
-!CultureSpot-Domain/src/main/resources/application-test.yml
+!CultureSpot-Domain/src/main/resources/domai-application.yml
+!CultureSpot-Domain/src/main/resources/domai-application-dev.yml
+!CultureSpot-Domain/src/main/resources/domai-application-prod.yml
+!CultureSpot-Domain/src/main/resources/domai-application-test.yml
 
 # domain-module.env
 env/domain-module.env

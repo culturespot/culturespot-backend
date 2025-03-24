@@ -1,24 +1,19 @@
 package com.culturespot.culturespotdomain.core.user.entity;
 
+import com.culturespot.culturespotdomain.core.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(AuditingEntityListener.class)
 @Getter
-public class User {
+public class User extends BaseEntity {
     // ************************ column ************************ //
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,14 +31,6 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private SocialLoginType authType;
-
-    @CreatedDate
-    @Column(updatable = false, nullable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt;
     // ************************ column ************************ //
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

@@ -1,14 +1,10 @@
 package com.culturespot.culturespotdomain.core.post.entity;
 
+import com.culturespot.culturespotdomain.core.global.entity.BaseEntity;
 import com.culturespot.culturespotdomain.core.image.entity.Image;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "posts")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(AuditingEntityListener.class)
-public class Post {
+public class Post extends BaseEntity {
     // ************************ column ************************ //
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,13 +37,6 @@ public class Post {
     @Column(nullable = false)
     private Long viewCount = 0L;
 
-    @CreatedDate
-    @Column(updatable = false, nullable = false)  // 생성일 수정 불가
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(nullable = false)
-    private LocalDateTime modifiedAt;
     // ************************ column ************************ //
 
     @Builder

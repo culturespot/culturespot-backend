@@ -18,7 +18,7 @@ spring:
     init:
       mode: always
       data-locations:
-        - ${LOCAL_INIT_DML_SQL_PATH}
+        - ${MYSQL_INIT_DML_SQL_PATH}
 
   minio:
     endpoint: ${MINIO_ENDPOINT}

@@ -37,6 +37,23 @@ subprojects {
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+        // To use junit and mockito
+        testImplementation 'org.junit.jupiter:junit-jupiter'
+        testImplementation 'org.junit.jupiter:junit-jupiter-api'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine'
+        testImplementation 'org.mockito:mockito-core'
+        testImplementation 'org.mockito:mockito-junit-jupiter'
+
+        // To enable the use of random values, such as POJOs, integers, longs, etc.
+        testImplementation 'io.github.glytching:junit-extensions:2.1.0'
+
+        // To enable to map dto <-> dto, dto <-> entity with Mapstruct
+        implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+        annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
+
+        // To use Google Guava
+        implementation 'com.google.guava:guava:32.0.1-jre'
     }
 
     test {

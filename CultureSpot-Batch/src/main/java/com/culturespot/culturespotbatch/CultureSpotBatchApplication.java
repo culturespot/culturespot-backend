@@ -1,17 +1,16 @@
 package com.culturespot.culturespotbatch;
 
+import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
-@EnableScheduling
-@SpringBootApplication
+@EnableBatchProcessing
+@SpringBootApplication(exclude = {BatchAutoConfiguration.class})
 @ComponentScan(basePackages = {
 		"com.culturespot.culturespotbatch",
-		"com.culturespot.culturespotapi",
 		"com.culturespot.culturespotdomain",
-		"com.culturespot.culturespotcommon"
 })
 public class CultureSpotBatchApplication {
 

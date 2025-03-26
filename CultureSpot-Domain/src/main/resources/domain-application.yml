@@ -1,0 +1,31 @@
+storage:
+  type: minio
+
+spring:
+  profiles:
+    group:
+      prod:
+        - prod
+      dev:
+        - dev
+    default: local
+
+  config:
+    import: optional:file:env/domain-module.env[.properties]
+  servlet:
+    multipart:
+      enabled: true
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+    defer-datasource-initialization: true
+
+  jwt:
+    private-key-pem: ${JWT_PRIVATE_KEY}
+    public-key-pem: ${JWT_PUBLIC_KEY}
+    access-expiration-time: 1800  # Access Token 만료 시간 (30분)
+    refresh-expiration-time: 1209600  # Refresh Token 만료 시간 (14일)

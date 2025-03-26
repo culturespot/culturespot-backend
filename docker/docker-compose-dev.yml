@@ -1,0 +1,52 @@
+# 실행 명령어 : docker-compose -p culturespot-dev -f docker-compose-dev.yml up --build
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-culturespot-container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: culturespot_dev
+      MYSQL_USER: culturespot_user
+      MYSQL_PASSWORD: culturespot_user
+    ports:
+      - "3307:3306"
+    volumes:
+      - culturespot-dev-db-data:/var/lib/mysql
+      - ../CultureSpot-Domain/src/main/resources/sql/local-init-dml.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - culturespot-dev-net
+
+  api-server:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.service-api
+    image: culturespot-service-api
+    container_name: culturespot-service-api-container
+    ports:
+      - "8080:8080"
+    depends_on:
+      - mysql
+    env_file:
+      - ../env/serviceApi-module.env
+      - ../env/domain-module.env
+    networks:
+      - culturespot-dev-net
+
+  batch-server:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile.batch
+    image: culturespot-batch
+    container_name: culturespot-batch-container
+    depends_on:
+      - mysql
+    networks:
+      - culturespot-dev-net
+
+volumes:
+  culturespot-dev-db-data:
+
+networks:
+  culturespot-dev-net:

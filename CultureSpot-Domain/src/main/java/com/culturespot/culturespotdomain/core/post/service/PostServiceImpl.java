@@ -53,7 +53,7 @@ public class PostServiceImpl implements PostService {
     public void modifyPost(User user, Long postId, PostModifyRequest request) {
         Post currentPost = findPostOrThrow(postId);
 
-        PostValidator.validateEditPermission(user.getUserId(), currentPost.getPostId());
+        PostValidator.validateEditPermission(user.getId(), currentPost.getId());
 
         Post updatePost = modifyPostDetails(currentPost, request);
 
@@ -65,7 +65,7 @@ public class PostServiceImpl implements PostService {
     public void deletePost(User user, Long postId) {
         Post post = findPostOrThrow(postId);
 
-        PostValidator.validateDeletePermission(user.getUserId(), postId);
+        PostValidator.validateDeletePermission(user.getId(), postId);
 
         postRepository.delete(post);
         imageService.deleteImages(postId);

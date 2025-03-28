@@ -1,5 +1,6 @@
-package com.culturespot.culturespotdomain.core.post.dto;
+package com.culturespot.culturespotserviceapi.core.post.dto.request;
 
+import com.culturespot.culturespotserviceapi.core.post.dto.PostDetails;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Builder;
 import org.springframework.web.multipart.MultipartFile;

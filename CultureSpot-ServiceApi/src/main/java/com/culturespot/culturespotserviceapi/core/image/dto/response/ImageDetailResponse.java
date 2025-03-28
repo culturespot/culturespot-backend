@@ -1,4 +1,4 @@
-package com.culturespot.culturespotdomain.core.image.dto;
+package com.culturespot.culturespotserviceapi.core.image.dto.response;
 
 import com.culturespot.culturespotdomain.core.global.config.StorageBasePaths;
 import com.culturespot.culturespotdomain.core.image.entity.Image;

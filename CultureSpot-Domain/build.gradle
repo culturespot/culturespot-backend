@@ -12,7 +12,7 @@ dependencies {
     implementation 'org.springframework.security:spring-security-core:5.8.1'
 
     // QueryDSL 설정
-    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    api 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
@@ -34,6 +34,15 @@ dependencies {
 
     // Mockito JUnit 5 연동
     testImplementation 'org.mockito:mockito-junit-jupiter:5.2.0'
+
+    implementation 'org.springframework:spring-oxm'
+    implementation 'jakarta.xml.bind:jakarta.xml.bind-api'
+    implementation 'org.glassfish.jaxb:jaxb-runtime'
+
+    implementation group: 'jakarta.xml.bind', name: 'jakarta.xml.bind-api', version: '4.0.2'
+
+    implementation 'com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.15.3'
+    implementation 'com.fasterxml:jackson-xml-databind:0.6.2'
 }
 
 def buildDir = layout.buildDirectory.get().asFile

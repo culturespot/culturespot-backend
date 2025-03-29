@@ -38,8 +38,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: ▶️ Set lowercase repository name
+        run: echo "REPO_NAME=${{ github.repository }}" | tr '[:upper:]' '[:lower:]' >> $GITHUB_ENV
+
       - name: ▶️ Build Docker image for batch module
-        run: docker build -t ghcr.io/${{ github.repository | toLowerCase }}/batch:latest -f ./CultureSpot-Batch/Dockerfile .
+        run: docker build -t ghcr.io/${{ env.REPO_NAME }}/batch:latest -f ./CultureSpot-Batch/Dockerfile .
 
       - name: ▶️ Push Docker image for batch module
-        run: docker push ghcr.io/${{ github.repository | toLowerCase }}/batch:latest
+        run: docker push ghcr.io/${{ env.REPO_NAME }}/batch:latest

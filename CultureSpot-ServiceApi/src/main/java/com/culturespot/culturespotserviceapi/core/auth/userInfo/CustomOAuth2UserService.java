@@ -13,6 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,7 +52,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         List<GrantedAuthority> authorities = getUserAuthorities(user);
 
         // `OAuth2User`를 커스텀 객체로 감싸서 반환 (권한 포함)
-        return new CustomOAuth2User(oauth2User, authorities);
+        return new CustomOAuth2User(oauth2User, email, authorities);
     }
 
     private User createNewUser(String email, SocialLoginType authType) {
@@ -100,6 +101,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             case GOOGLE -> oauth2User.getAttribute("email");
             case KAKAO -> {
                 Map<String, Object> kakaoAccount = oauth2User.getAttribute("kakao_account");
+                if (kakaoAccount == null || kakaoAccount.get("email") == null) {
+                    throw new OAuth2AuthenticationException("카카오 이메일 정보가 없습니다.");
+                }
                 yield (String) kakaoAccount.get("email");
             }
             default -> throw new IllegalStateException("지원하지 않는 공급자입니다.");

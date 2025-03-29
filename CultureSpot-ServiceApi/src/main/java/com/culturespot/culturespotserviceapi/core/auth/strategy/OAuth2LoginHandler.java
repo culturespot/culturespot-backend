@@ -34,11 +34,13 @@ public class OAuth2LoginHandler {
 
     private LoginSuccessResponse handleGoogle(LoginContext ctx) {
         User user = userService.findUserOrThrow(ctx.email());
+        userService.updateLastLoginAt(user);
         return toResponse(user);
     }
 
     private LoginSuccessResponse handleKakao(LoginContext ctx) {
         User user = userService.findUserOrThrow(ctx.email());
+        userService.updateLastLoginAt(user);
         return toResponse(user);
     }
 

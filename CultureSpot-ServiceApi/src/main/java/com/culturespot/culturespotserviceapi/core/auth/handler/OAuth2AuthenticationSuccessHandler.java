@@ -71,7 +71,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
-        // ✅ 응답 객체 생성
+        // ✅ 응답 객체 생성 & 사용자 최신 로그인 시간 업데이트
         LoginSuccessResponse responseDto = oAuth2LoginHandler.handle(registrationId, email);
 
         new ObjectMapper()

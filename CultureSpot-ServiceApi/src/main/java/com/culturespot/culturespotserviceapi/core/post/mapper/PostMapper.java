@@ -1,7 +1,7 @@
 package com.culturespot.culturespotserviceapi.core.post.mapper;
 
 import com.culturespot.culturespotdomain.core.post.entity.Post;
-import com.culturespot.culturespotdomain.core.post.entity.PostModifyCommand;
+import com.culturespot.culturespotdomain.core.post.dto.PostModifyCommand;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotserviceapi.core.post.dto.PostDetails;
 import com.culturespot.culturespotserviceapi.core.post.dto.request.PostCreateRequest;

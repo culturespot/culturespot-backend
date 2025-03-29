@@ -1,4 +1,4 @@
-package com.culturespot.culturespotdomain.core.post.entity;
+package com.culturespot.culturespotdomain.core.post.dto;
 
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;

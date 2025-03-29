@@ -2,19 +2,15 @@ package com.culturespot.culturespotdomain.core.post.service;
 
 import com.culturespot.culturespotdomain.core.global.exception.DomainException;
 import com.culturespot.culturespotdomain.core.global.exception.DomainExceptionCode;
-import com.culturespot.culturespotdomain.core.image.entity.Image;
 import com.culturespot.culturespotdomain.core.image.service.ImageService;
 import com.culturespot.culturespotdomain.core.post.entity.Post;
-import com.culturespot.culturespotdomain.core.post.entity.PostModifyCommand;
+import com.culturespot.culturespotdomain.core.post.dto.PostModifyCommand;
 import com.culturespot.culturespotdomain.core.post.repository.PostRepository;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotdomain.core.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

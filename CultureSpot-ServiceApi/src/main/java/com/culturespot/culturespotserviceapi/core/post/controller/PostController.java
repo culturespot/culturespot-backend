@@ -4,7 +4,7 @@ import com.culturespot.culturespotdomain.core.post.entity.Post;
 import com.culturespot.culturespotdomain.core.post.service.PostService;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotserviceapi.core.post.mapper.PostMapper;
-import com.culturespot.culturespotdomain.core.post.entity.PostModifyCommand;
+import com.culturespot.culturespotdomain.core.post.dto.PostModifyCommand;
 import com.culturespot.culturespotserviceapi.core.post.dto.request.PostCreateRequest;
 import com.culturespot.culturespotserviceapi.core.post.dto.request.PostModifyRequest;
 import com.culturespot.culturespotserviceapi.core.post.dto.response.PostSingleResponse;

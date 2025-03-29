@@ -1,9 +1,12 @@
-package com.culturespot.culturespotdomain.core.refreshToken.handler;
+package com.culturespot.culturespotserviceapi.core.auth.handler;
 
 import com.culturespot.culturespotdomain.core.refreshToken.service.RefreshTokenService;
 import com.culturespot.culturespotdomain.core.user.entity.SocialLoginType;
 import com.culturespot.culturespotdomain.core.global.jwt.JwtTokenManager;
+import com.culturespot.culturespotserviceapi.core.auth.dto.response.LoginSuccessResponse;
+import com.culturespot.culturespotserviceapi.core.auth.strategy.OAuth2LoginHandler;
 import com.culturespot.culturespotserviceapi.core.global.utils.CookieUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -22,15 +25,18 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final int REFRESH_TOKEN_EXPIRATION;
     private final JwtTokenManager jwtTokenManager;
     private final RefreshTokenService refreshTokenService;
+    private final OAuth2LoginHandler oAuth2LoginHandler;
 
     public OAuth2AuthenticationSuccessHandler(
             @Value("${spring.jwt.refresh-expiration-time}") final int REFRESH_TOKEN_EXPIRATION,
             JwtTokenManager jwtTokenManager,
-            RefreshTokenService refreshTokenService
+            RefreshTokenService refreshTokenService,
+            OAuth2LoginHandler oAuth2LoginHandler
     ) {
         this.jwtTokenManager = jwtTokenManager;
         this.REFRESH_TOKEN_EXPIRATION = REFRESH_TOKEN_EXPIRATION;
         this.refreshTokenService = refreshTokenService;
+        this.oAuth2LoginHandler = oAuth2LoginHandler;
     }
 
     @Override
@@ -39,46 +45,36 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             HttpServletResponse response,
             Authentication authentication
     ) throws IOException {
-        if (!(authentication instanceof OAuth2AuthenticationToken oauthToken)) {
-            return;
-        }
 
-        // ✅ 소셜 로그인 제공자 가져오기
-        String registrationId = oauthToken.getAuthorizedClientRegistrationId();
-        SocialLoginType socialLoginType = SocialLoginType.fromRegistrationId(registrationId);
+        if (!(authentication instanceof OAuth2AuthenticationToken oauthToken)) return;
 
-        // ✅ 사용자 이메일 가져오기
-        String email = authentication.getName();
+        String registrationId = oauthToken.getAuthorizedClientRegistrationId(); // 소셜 로그인 제공자 가져오기
+        String email = authentication.getName(); // 사용자 이메일 가져오기
 
         // ✅ JWT 토큰 발급
         String accessToken = jwtTokenManager.createAccessToken(email, Set.of("ROLE_USER"));
         String refreshToken = jwtTokenManager.createRefreshToken(email);
 
-        // ✅ Access Token을 헤더에 추가
-        response.setHeader("Authorization", "Bearer " + accessToken);
-        System.out.println("accessToken..................................." + accessToken);
+        response.setHeader("Authorization", "Bearer " + accessToken); // access token 헤더에 추가
 
         // ✅ Refresh Token을 HttpOnly & Secure 쿠키에 저장
         Cookie refreshTokenCookie = CookieUtils.createSecureCookie(
-                "refreshToken",
-                refreshToken,
-                REFRESH_TOKEN_EXPIRATION
+                "refreshToken", refreshToken, REFRESH_TOKEN_EXPIRATION
         );
         response.addCookie(refreshTokenCookie);
 
-        // ✅ refreshToken을 데이터베이스에 저장 (SocialLoginType 포함)
-        refreshTokenService.saveRefreshToken(email, socialLoginType, refreshToken);
+        // ✅ refreshToken db 저장 (SocialLoginType 포함)
+        refreshTokenService.saveRefreshToken(email,  SocialLoginType.fromRegistrationId(registrationId), refreshToken);
 
-        // ✅ 리다이렉트
-        String redirectUri = request.getParameter("redirect_uri");
-        if (redirectUri == null || !(redirectUri.startsWith("http://localhost:3000") || redirectUri.startsWith("http://localhost:8080"))) {
-            // 📍프론트에서 redirect_uri가 의도하는 대로 동작하지 않으면 수정이 필요합니다.
-            redirectUri = "http://localhost:8080/api/public/test";
-        }
+        // ✅ JSON 응답 설정
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-        if (!response.isCommitted()) {
-            response.sendRedirect(redirectUri);
-        }
+        // ✅ 응답 객체 생성
+        LoginSuccessResponse responseDto = oAuth2LoginHandler.handle(registrationId, email);
+
+        new ObjectMapper()
+                .writeValue(response.getWriter(), responseDto);
     }
-
 }

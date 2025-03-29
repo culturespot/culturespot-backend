@@ -3,11 +3,10 @@ package com.culturespot.culturespotbatch;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.batch.BatchAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
 
 @EnableBatchProcessing
-@SpringBootApplication(exclude = {BatchAutoConfiguration.class})
+@SpringBootApplication
 @ComponentScan(basePackages = {
 		"com.culturespot.culturespotbatch",
 		"com.culturespot.culturespotdomain",

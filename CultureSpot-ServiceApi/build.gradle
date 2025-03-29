@@ -11,3 +11,7 @@ dependencies {
 }
 
 tasks.register("prepareKotlinBuildScriptModel"){}
+
+bootJar {
+	archiveFileName = 'api.jar'
+}

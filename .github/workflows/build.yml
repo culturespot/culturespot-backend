@@ -1,4 +1,4 @@
-name: Build and Push Docker Images
+name: Build
 
 on:
   push:
@@ -43,3 +43,9 @@ jobs:
 
       - name: ▶️ Push Docker image for batch module
         run: docker push ghcr.io/${{ github.repository }}/batch:latest
+
+      - name: ▶️ Build Docker image for api module
+        run: docker build -t ghcr.io/${{ github.repository }}/api:latest -f ./CultureSpot-ServiceApi/Dockerfile .
+
+      - name: ▶️ Push Docker image for api module
+        run: docker push ghcr.io/${{ github.repository }}/api:latest

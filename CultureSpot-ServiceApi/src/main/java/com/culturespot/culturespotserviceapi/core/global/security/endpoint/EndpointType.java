@@ -11,7 +11,6 @@ public enum EndpointType {
     public static final String PUBLIC_PATH = "/api/public";
     public static final String USER_PATH = "/api/users";
     public static final String ADMIN_PATH = "/api/admins";
-    public static final String GOOGLE_LOGIN_PATH = "/login/oauth2/code/google"; // Spring Security에서 제공하는 리다이렉션 URI
 
     EndpointType(String path) {
         this.path = path;

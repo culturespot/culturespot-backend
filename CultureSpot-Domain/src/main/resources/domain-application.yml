@@ -19,9 +19,13 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     show-sql: true
     properties:
-      hibernate.format_sql: true
+      hibernate:
+        format_sql: true
+        physical_naming_strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
     defer-datasource-initialization: true
 
   jwt:
@@ -29,3 +33,10 @@ spring:
     public-key-pem: ${JWT_PUBLIC_KEY}
     access-expiration-time: 1800  # Access Token 만료 시간 (30분)
     refresh-expiration-time: 1209600  # Refresh Token 만료 시간 (14일)
+
+  batch:
+    jdbc:
+      initialize-schema: never
+
+discord:
+  webhook: ${DISCORD_WEBHOOK_URL}

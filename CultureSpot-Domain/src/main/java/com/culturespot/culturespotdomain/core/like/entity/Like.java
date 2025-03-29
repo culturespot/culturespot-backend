@@ -9,7 +9,7 @@ import jakarta.persistence.*;
 public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long likeId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)

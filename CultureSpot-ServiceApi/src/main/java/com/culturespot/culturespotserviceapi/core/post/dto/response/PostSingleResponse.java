@@ -1,7 +1,7 @@
-package com.culturespot.culturespotdomain.core.post.dto;
+package com.culturespot.culturespotserviceapi.core.post.dto.response;
 
-import com.culturespot.culturespotdomain.core.image.dto.ImageDetailResponse;
 import com.culturespot.culturespotdomain.core.post.entity.Post;
+import com.culturespot.culturespotserviceapi.core.image.dto.response.ImageDetailResponse;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import lombok.Builder;
 

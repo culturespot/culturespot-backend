@@ -16,7 +16,7 @@ public class Post extends BaseEntity {
     // ************************ column ************************ //
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long postId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)

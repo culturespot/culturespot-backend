@@ -1,4 +1,4 @@
-name: Deploy to AWS EC2
+name: Build and Deploy to AWS EC2
 
 on:
   push:
@@ -12,21 +12,18 @@ jobs:
     needs: build
 
     steps:
-      - name: Checkout Repository
+      - name: ▶️ Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Set up SSH
+      - name: ▶️ Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-      - name: ▶️ Set lowercase repository name
-        run: echo "REPO_NAME=${{ github.repository }}" | tr '[:upper:]' '[:lower:]' >> $GITHUB_ENV
-
-      - name: Deploy to AWS EC2
+      - name: ▶️ Deploy to AWS EC2
         run: |
           ssh -o StrictHostKeyChecking=no ec2-user@your-ec2-instance << 'EOF'
             docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-            docker pull ghcr.io/${{ env.REPO_NAME }}/batch:latest
-            docker run -d --name culture-spot-batch ghcr.io/${{ env.REPO_NAME }}/batch:latest
+            docker pull ghcr.io/${{ github.repository }}/batch:latest
+            docker run -d --name culture-spot-batch ghcr.io/${{ github.repository }}/batch:latest
           EOF

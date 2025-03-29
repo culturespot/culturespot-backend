@@ -28,6 +28,9 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String nickname;
 
+    @Column(name="profile_code", nullable = false)
+    private int profileCode;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private SocialLoginType authType;
@@ -42,13 +45,15 @@ public class User extends BaseEntity {
             String nickname,
             SocialLoginType authType,
             Set<UserRole> roles,
-            String password
+            String password,
+            int profileCode
     ){
         this.email = email;
         this.nickname = nickname;
         this.authType = authType;
         this.roles = roles;
         this.password = password;
+        this.profileCode = profileCode;
     }
 
     public void addRole(UserRole userRole) {

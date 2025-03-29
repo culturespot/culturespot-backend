@@ -6,8 +6,8 @@ RUN yum install -y epel-release && \
 
 WORKDIR /app
 
-COPY build/libs/batch.jar /app/batch.jar
-COPY entrypoint.sh /app/entrypoint.sh
+COPY ./CultureSpot-Batch/build/libs/batch.jar /app/batch.jar
+COPY ./CultureSpot-Batch/entrypoint.sh /app/entrypoint.sh
 
 EXPOSE 8080
 

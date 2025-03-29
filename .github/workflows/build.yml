@@ -39,7 +39,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: ▶️ Build Docker image for batch module
-        run: docker build -t ghcr.io/${{ github.repository }}/batch:latest -f Culture-Spot-batch/
+        run: docker build -t ghcr.io/culture-spot/batch:latest -f ./CultureSpot-Batch/Dockerfile .
 
       - name: ▶️ Push Docker image for batch module
-        run: docker push ghcr.io/${{ github.repository }}/batch:latest
+        run: docker push ghcr.io/culture-spot/batch:latest

@@ -19,10 +19,16 @@ public class ExceptionStatusMapper {
         AUTH_STATUS_MAP.put(AuthExceptionCode.MALFORMED_ACCESS_TOKEN.getCode(), HttpStatus.BAD_REQUEST); //🔥400
         AUTH_STATUS_MAP.put(AuthExceptionCode.SIGNATURE_ACCESS_TOKEN.getCode(), HttpStatus.UNAUTHORIZED); //🔥401
         // refresh-token
+        AUTH_STATUS_MAP.put(AuthExceptionCode.EXPIRED_REFRESH_TOKEN.getCode(), HttpStatus.UNAUTHORIZED); //🔥401
+        AUTH_STATUS_MAP.put(AuthExceptionCode.MALFORMED_REFRESH_TOKEN.getCode(), HttpStatus.BAD_REQUEST); //🔥400
+        AUTH_STATUS_MAP.put(AuthExceptionCode.SIGNATURE_REFRESH_TOKEN.getCode(), HttpStatus.UNAUTHORIZED); //🔥401
 
         // USER
         AUTH_STATUS_MAP.put(AuthExceptionCode.USER_NOT_FOUND.getCode(), HttpStatus.NOT_FOUND); //🔥404
         AUTH_STATUS_MAP.put(AuthExceptionCode.UNAUTHENTICATED_USER.getCode(), HttpStatus.FORBIDDEN); //🔥403
+
+        // AUTHENTICATION
+        AUTH_STATUS_MAP.put(AuthExceptionCode.CANCELLED_AUTHENTICATION.getCode(), HttpStatus.NO_CONTENT); //🔥204
         AUTH_STATUS_MAP.put(AuthExceptionCode.INVALID_AUTHENTICATION.getCode(), HttpStatus.UNAUTHORIZED); //🔥401
 
         /* ✅ DomainException 상태 코드 매핑 */

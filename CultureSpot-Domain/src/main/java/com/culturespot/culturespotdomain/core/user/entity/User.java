@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,6 +36,9 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = true)
     private SocialLoginType authType;
+
+    @Column(name="last_login_at", nullable = false)
+    private LocalDateTime lastLoginAt = LocalDateTime.now();
     // ************************ column ************************ //
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)

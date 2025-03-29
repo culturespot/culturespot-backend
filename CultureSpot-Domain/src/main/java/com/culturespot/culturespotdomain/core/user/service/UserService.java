@@ -39,4 +39,6 @@ public interface UserService{
      * @return 생성되거나 기존에 존재하던 {@link User} 객체
      */
     User createUserIfNotExists(String email, SocialLoginType authType);
+
+    public void updateLastLoginAt(User user);
 }

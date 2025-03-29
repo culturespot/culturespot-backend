@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -70,5 +71,16 @@ public class UserServiceImpl implements UserService {
         return user.getRoles().stream()
                 .map(userRole -> userRole.getRole().getRoleType().name())
                 .collect(Collectors.toSet());
+    }
+
+    /**
+     *  사용자의 최근 접속시간 업데이트
+     *
+     * @param user 사용자 정보를 담고 있는 {@link User} 객체
+     * */
+    @Override
+    @Transactional
+    public void updateLastLoginAt(User user) {
+        userRepository.updateLastLoginAt(user.getId(), LocalDateTime.now());
     }
 }

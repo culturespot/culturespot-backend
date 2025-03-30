@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:culturesport_test
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+  sql:
+    init:
+      mode: always
+      data-locations:
+        - ${H2_INIT_DML_SQL_PATH}

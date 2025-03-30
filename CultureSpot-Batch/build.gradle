@@ -18,3 +18,11 @@ dependencies {
 }
 
 tasks.register("prepareKotlinBuildScriptModel"){}
+
+tasks.named('jar') {
+    enabled = false
+}
+
+bootJar {
+    archiveFileName = 'batch.jar'
+}

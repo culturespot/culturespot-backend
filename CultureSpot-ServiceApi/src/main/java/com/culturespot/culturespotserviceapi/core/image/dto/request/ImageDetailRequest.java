@@ -1,4 +1,4 @@
-package com.culturespot.culturespotdomain.core.image.dto;
+package com.culturespot.culturespotserviceapi.core.image.dto.request;
 
 import lombok.Builder;
 

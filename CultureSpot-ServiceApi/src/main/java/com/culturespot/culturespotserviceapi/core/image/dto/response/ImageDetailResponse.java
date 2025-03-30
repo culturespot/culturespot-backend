@@ -1,4 +1,4 @@
-package com.culturespot.culturespotdomain.core.image.dto;
+package com.culturespot.culturespotserviceapi.core.image.dto.response;
 
 import com.culturespot.culturespotdomain.core.global.config.StorageBasePaths;
 import com.culturespot.culturespotdomain.core.image.entity.Image;
@@ -11,7 +11,7 @@ public record ImageDetailResponse(
 ){
     public static ImageDetailResponse from(Image image) {
         return ImageDetailResponse.builder()
-                .imageId(image.getImageId().toString())
+                .imageId(image.getId().toString())
                 .imageUrl(StorageBasePaths.COMMUNITY_IMAGE_PATH + image.getStoredFileName())
                 .build();
     }

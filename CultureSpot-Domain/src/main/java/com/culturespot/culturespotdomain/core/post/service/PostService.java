@@ -1,13 +1,16 @@
 package com.culturespot.culturespotdomain.core.post.service;
 
-import com.culturespot.culturespotdomain.core.post.dto.PostCreateRequest;
-import com.culturespot.culturespotdomain.core.post.dto.PostModifyRequest;
-import com.culturespot.culturespotdomain.core.post.dto.PostSingleResponse;
+import com.culturespot.culturespotdomain.core.post.entity.Post;
+import com.culturespot.culturespotdomain.core.post.dto.PostModifyCommand;
 import com.culturespot.culturespotdomain.core.user.entity.User;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface PostService {
-    PostSingleResponse getPost(Long postId);
-    void createPost(User user, PostCreateRequest request);
-    void modifyPost(User user, Long postId, PostModifyRequest request);
+    Post getPost(Long postId);
+
+    @Transactional
+    void createPost(User user, Post post);
+
+    void modifyPost(User user, Long postId, PostModifyCommand command);
     void deletePost(User user, Long postId);
 }

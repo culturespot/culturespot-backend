@@ -21,7 +21,7 @@ jobs:
 
       - name: ▶️ Deploy to AWS EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ec2-user@${{ secrets.DEV_AWS_PUBLIC_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.DEV_AWS_PUBLIC_HOST }} << 'EOF'
             echo "🔐 Logged into EC2"
           
             # GHCR 로그인

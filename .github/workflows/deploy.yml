@@ -10,15 +10,24 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: dev
 
     steps:
       - name: ▶️ Checkout Repository
         uses: actions/checkout@v4
 
+      - name: 🔍 Check if SSH key is populated (masked)
+        run: |
+          if [ -z "${{ secrets.AWS_PRIVATE_KEY }}" ]; then
+            echo "🚨 SSH key is empty"
+          else
+            echo "✅ SSH key is set (value masked)"
+          fi
+
       - name: ▶️ Set up SSH
         uses: webfactory/ssh-agent@v0.5.3
         with:
-          ssh-private-key: ${{ secrets.DEV_AWS_ACCESS_KEY }}
+          ssh-private-key: ${{ secrets.AWS_PRIVATE_KEY }}
 
       - name: ▶️ Deploy to AWS EC2
         run: |

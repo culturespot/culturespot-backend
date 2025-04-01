@@ -17,7 +17,7 @@ jobs:
 
       - name: 🔍 Check if SSH key is populated (masked)
         run: |
-          if [ -z "${{ secrets.DEV_AWS_PRIVATE_KEY }}" ]; then
+          if [ -z "${{ secrets.AWS_PRIVATE_KEY }}" ]; then
             echo "🚨 SSH key is empty"
           else
             echo "✅ SSH key is set (value masked)"

@@ -16,38 +16,23 @@ jobs:
       - name: ▶️ Checkout Repository
         uses: actions/checkout@v4
 
-#      - name: ▶️ Set up SSH
-#        uses: webfactory/ssh-agent@v0.5.3
-#        with:
-#          ssh-private-key: ${{ secrets.AWS_PRIVATE_KEY }}
+      - name: 📤 Upload JWT key files to EC2
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.DEV_AWS_PUBLIC_HOST }}
+          username: ubuntu
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          source: ./CultureSpot-Domain/src/main/resources/key/*.pem
+          target: /home/ubuntu/app/keys/
 
-#      - name: ▶️ Deploy to AWS EC2
-#        run: |
-#          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.DEV_AWS_PUBLIC_HOST }} << 'EOF'
-#            echo "🔐 Logged into EC2"
-#
-#            # GHCR 로그인
-#            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-#
-#            # -------------------------
-#            # 1. Batch 서비스 배포
-#            # -------------------------
-#            docker rm -f culture-spot-batch || true
-#            docker pull ghcr.io/${{ github.repository }}/batch:latest
-#            docker run -d --name culture-spot-batch \
-#              ghcr.io/${{ github.repository }}/batch:latest
-#
-#            # -------------------------
-#            # 2. API 서비스 배포
-#            # -------------------------
-#            docker rm -f culture-spot-api || true
-#            docker pull ghcr.io/${{ github.repository }}/api:latest
-#            docker run -d -p 8080:8080 --name culture-spot-api \
-#              -e SPRING_PROFILE=dev \
-#              ghcr.io/${{ github.repository }}/api:latest
-#
-#            echo "🚀 All services deployed successfully"
-#          EOF
+      - name: 📤 Upload env files to EC2
+        uses: appleboy/scp-action@v0.1.4
+        with:
+          host: ${{ secrets.DEV_AWS_PUBLIC_HOST }}
+          username: ubuntu
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          source: ./env/*.env
+          target: /home/ubuntu/app/env/
 
       - name: ▶️ Deploy to AWS EC2
         uses: appleboy/ssh-action@v0.1.10
@@ -72,6 +57,8 @@ jobs:
               -e SPRING_PROFILE=dev \
               -e JWT_PRIVATE_KEY="${{ secrets.JWT_PRIVATE_KEY }}" \
               -e JWT_PUBLIC_KEY="${{ secrets.JWT_PUBLIC_KEY }}" \
+              -v /home/ubuntu/app/keys:/app/keys \
+              -v /home/ubuntu/app/env:/app/env \
               ghcr.io/${{ github.repository }}/api:latest
             
             echo "🚀 All services deployed successfully"

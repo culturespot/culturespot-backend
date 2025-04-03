@@ -37,7 +37,7 @@ jobs:
             docker rm -f culture-spot-api || true
             docker pull ghcr.io/${{ github.repository }}/api:latest
             docker run -d -p 8080:8080 --name culture-spot-api \
-              -e SPRING_PROFILE=dev \
+              -e SPRING_PROFILES_ACTIVE=dev \
               -e JWT_PRIVATE_KEY="${{ secrets.JWT_PRIVATE_KEY }}" \
               -e JWT_PUBLIC_KEY="${{ secrets.JWT_PUBLIC_KEY }}" \
               -v /home/ubuntu/app/keys:/app/keys \

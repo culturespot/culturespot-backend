@@ -17,28 +17,6 @@ jobs:
       - name: ▶️ Checkout Repository
         uses: actions/checkout@v4
 
-      - name: 🔎 List key files before scp
-        run: |
-          find . -name "*.pem" || echo "No .pem files found"
-
-      - name: 📤 Upload JWT key files to EC2
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host: ${{ secrets.DEV_AWS_PUBLIC_HOST }}
-          username: ubuntu
-          key: ${{ secrets.AWS_PRIVATE_KEY }}
-          source: ./CultureSpot-Domain/src/main/resources/key/*.pem
-          target: /home/ubuntu/app/keys/
-
-      - name: 📤 Upload env files to EC2
-        uses: appleboy/scp-action@v0.1.4
-        with:
-          host: ${{ secrets.DEV_AWS_PUBLIC_HOST }}
-          username: ubuntu
-          key: ${{ secrets.AWS_PRIVATE_KEY }}
-          source: ./env/*.env
-          target: /home/ubuntu/app/env/
-
       - name: ▶️ Deploy to AWS EC2
         uses: appleboy/ssh-action@v0.1.10
         with:

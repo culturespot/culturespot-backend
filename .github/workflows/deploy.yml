@@ -17,6 +17,10 @@ jobs:
       - name: ▶️ Checkout Repository
         uses: actions/checkout@v4
 
+      - name: 🔎 List key files before scp
+        run: |
+          find . -name "*.pem" || echo "No .pem files found"
+
       - name: 📤 Upload JWT key files to EC2
         uses: appleboy/scp-action@v0.1.4
         with:

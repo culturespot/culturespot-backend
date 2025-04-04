@@ -7,7 +7,7 @@ on:
       - 'feature/*'
   pull_request:
     branches:
-      - devg
+      - dev
       - master
 
 permissions:

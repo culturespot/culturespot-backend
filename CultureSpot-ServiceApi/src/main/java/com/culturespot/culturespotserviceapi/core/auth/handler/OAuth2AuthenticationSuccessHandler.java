@@ -4,7 +4,7 @@ import com.culturespot.culturespotdomain.core.refreshToken.service.RefreshTokenS
 import com.culturespot.culturespotdomain.core.user.entity.SocialLoginType;
 import com.culturespot.culturespotdomain.core.global.jwt.JwtTokenManager;
 import com.culturespot.culturespotserviceapi.core.auth.dto.response.LoginSuccessResponse;
-import com.culturespot.culturespotserviceapi.core.auth.strategy.OAuth2LoginHandler;
+import com.culturespot.culturespotserviceapi.core.auth.strategy.OAuth2LoginSuccessHandler;
 import com.culturespot.culturespotserviceapi.core.global.utils.CookieUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
@@ -25,18 +25,18 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final int REFRESH_TOKEN_EXPIRATION;
     private final JwtTokenManager jwtTokenManager;
     private final RefreshTokenService refreshTokenService;
-    private final OAuth2LoginHandler oAuth2LoginHandler;
+    private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     public OAuth2AuthenticationSuccessHandler(
             @Value("${spring.jwt.refresh-expiration-time}") final int REFRESH_TOKEN_EXPIRATION,
             JwtTokenManager jwtTokenManager,
             RefreshTokenService refreshTokenService,
-            OAuth2LoginHandler oAuth2LoginHandler
+            OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler
     ) {
         this.jwtTokenManager = jwtTokenManager;
         this.REFRESH_TOKEN_EXPIRATION = REFRESH_TOKEN_EXPIRATION;
         this.refreshTokenService = refreshTokenService;
-        this.oAuth2LoginHandler = oAuth2LoginHandler;
+        this.oAuth2LoginSuccessHandler = oAuth2LoginSuccessHandler;
     }
 
     @Override
@@ -72,7 +72,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         response.setCharacterEncoding("UTF-8");
 
         // ✅ 응답 객체 생성 & 사용자 최신 로그인 시간 업데이트
-        LoginSuccessResponse responseDto = oAuth2LoginHandler.handle(registrationId, email);
+        LoginSuccessResponse responseDto = oAuth2LoginSuccessHandler.handle(registrationId, email);
 
         new ObjectMapper()
                 .writeValue(response.getWriter(), responseDto);

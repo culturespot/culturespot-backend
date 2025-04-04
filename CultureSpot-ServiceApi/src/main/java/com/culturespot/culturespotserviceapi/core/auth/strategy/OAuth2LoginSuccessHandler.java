@@ -12,13 +12,13 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Component
-public class OAuth2LoginHandler {
+public class OAuth2LoginSuccessHandler {
 
     private final UserService userService;
 
     private final Map<String, Function<LoginContext, LoginSuccessResponse>> loginStrategies;
 
-    public OAuth2LoginHandler(UserService userService) {
+    public OAuth2LoginSuccessHandler(UserService userService) {
         this.userService = userService;
         this.loginStrategies = Map.of(
                 "google", this::handleGoogle,

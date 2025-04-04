@@ -34,11 +34,11 @@ public class User extends BaseEntity {
     private int profileCode;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @Column(nullable = false)
     private SocialLoginType authType;
 
     @Column(name="last_login_at", nullable = false)
-    private LocalDateTime lastLoginAt = LocalDateTime.now();
+    private LocalDateTime lastLoginAt;
     // ************************ column ************************ //
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -51,7 +51,8 @@ public class User extends BaseEntity {
             SocialLoginType authType,
             Set<UserRole> roles,
             String password,
-            int profileCode
+            int profileCode,
+            LocalDateTime lastLoginAt
     ){
         this.email = email;
         this.nickname = nickname;
@@ -59,6 +60,7 @@ public class User extends BaseEntity {
         this.roles = roles;
         this.password = password;
         this.profileCode = profileCode;
+        this.lastLoginAt = lastLoginAt;
     }
 
     public void addRole(UserRole userRole) {

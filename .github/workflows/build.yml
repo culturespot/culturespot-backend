@@ -7,8 +7,11 @@ on:
       - 'feature/*'
   pull_request:
     branches:
-      - dev
+      - devg
       - master
+
+permissions:
+  contents: write
 
 jobs:
   build:

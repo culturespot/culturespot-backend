@@ -8,6 +8,7 @@ import com.culturespot.culturespotdomain.core.role.repository.RoleRepository;
 import com.culturespot.culturespotdomain.core.user.repository.UserRoleRepository;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotdomain.core.user.repository.UserRepository;
+import com.culturespot.culturespotdomain.core.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -20,12 +21,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+
+    private final UserService userService;
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
@@ -56,12 +58,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     }
 
     private User createNewUser(String email, SocialLoginType authType) {
-        User createUser = User.builder()
-                .email(email)
-                .nickname(email)
-                .password(UUID.randomUUID().toString()) // 랜덤 비밀번호 설정
-                .authType(authType)
-                .build();
+        User createUser = userService.createUser(email, authType);
 
         // 기본 권한 부여
         Role role = roleRepository.findByRoleType(UserRoleType.USER)

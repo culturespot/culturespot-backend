@@ -19,16 +19,6 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
-    /**
-     * 주어진 이메일에 해당하는 사용자를 조회
-     * <p>
-     * 사용자가 존재하면 해당 {@link User} 객체를 반환하고, 존재하지 않으면 {@link AuthException}을 발생시킵니다.
-     * </p>
-     *
-     * @param email 사용자의 이메일 주소
-     * @return 이메일에 해당하는 {@link User} 객체 반환
-     * @throws {@link AuthException} 사용자가 존재하지 않는다면 {@link AuthExceptionCode#USER_NOT_FOUND} 예외를 발생
-     */
     @Override
     @Transactional(readOnly = true)
     public User findUserOrThrow(String email) {
@@ -47,15 +37,22 @@ public class UserServiceImpl implements UserService {
     public User createUserIfNotExists(String email, SocialLoginType authType) {
         return userRepository.findByEmail(email)
                 .orElseGet(() -> {
-                    User newUser = User.builder()
-                            .email(email)
-                            .nickname(email)  // 기본적으로 이메일을 닉네임으로 설정
-                            .password(UUID.randomUUID().toString()) // 랜덤 패스워드 설정
-                            .authType(authType)
-                            .build();
+                    User newUser = createUser(email, authType);
                     return userRepository.save(newUser);  // 저장 후 반환
                 });
     }
+
+    @Override
+    public User createUser(String email, SocialLoginType authType) {
+        return User.builder()
+                .email(email)
+                .nickname(email)  // 기본적으로 이메일을 닉네임으로 설정
+                .password(UUID.randomUUID().toString()) // 랜덤 패스워드 설정
+                .authType(authType)
+                .lastLoginAt(LocalDateTime.now())
+                .build();
+    }
+
 
     /**
      *  사용자가 갖고 있는 권한 조회
@@ -73,11 +70,6 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toSet());
     }
 
-    /**
-     *  사용자의 최근 접속시간 업데이트
-     *
-     * @param user 사용자 정보를 담고 있는 {@link User} 객체
-     * */
     @Override
     @Transactional
     public void updateLastLoginAt(User user) {

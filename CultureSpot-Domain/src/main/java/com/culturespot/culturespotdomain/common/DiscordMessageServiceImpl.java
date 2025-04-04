@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
-@Profile(value = {"develop", "production"})
+@Profile(value = {"dev", "prod"})
 @Service
 public class DiscordMessageServiceImpl implements DiscordMessageService {
 

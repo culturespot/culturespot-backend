@@ -29,3 +29,6 @@ spring:
     public-key-pem: ${JWT_PUBLIC_KEY}
     access-expiration-time: 1800  # Access Token 만료 시간 (30분)
     refresh-expiration-time: 1209600  # Refresh Token 만료 시간 (14일)
+
+discord:
+  webhook: ${DISCORD_WEBHOOK_URL}

@@ -1,11 +1,11 @@
 package com.culturespot.culturespotdomain.core.global.config;
 
 import com.culturespot.culturespotdomain.core.global.jwt.KeyBuilder;
-import java.io.FileInputStream;
-import java.io.InputStream;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.Resource;
+import org.springframework.util.StreamUtils;
 
 import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
@@ -15,14 +15,14 @@ import java.security.PublicKey;
 public class KeyConfig {
 
     @Value("${spring.jwt.public-key-pem}")
-    private String publicKeyPath;
+    private Resource publicKeyFile;
 
     @Value("${spring.jwt.private-key-pem}")
-    private String privateKeyPath;
+    private Resource privateKeyFile;
 
     @Bean
     public PublicKey publicKey() throws Exception {
-        String base64PublicKey = readKeyFromFile(publicKeyPath);
+        String base64PublicKey = readKeyFromFile(publicKeyFile);
         return KeyBuilder.builder()
                 .setPublicKey(base64PublicKey)
                 .build()
@@ -31,7 +31,7 @@ public class KeyConfig {
 
     @Bean
     public PrivateKey privateKey() throws Exception {
-        String base64PrivateKey = readKeyFromFile(privateKeyPath);
+        String base64PrivateKey = readKeyFromFile(privateKeyFile);
         return KeyBuilder.builder()
                 .setPrivateKey(base64PrivateKey)
                 .build()
@@ -41,19 +41,9 @@ public class KeyConfig {
     /**
      * 파일에서 Base64로 인코딩된 키 값을 읽어오는 메서드
      */
-//    private String readKeyFromFile(Resource resource) throws Exception {
-//        byte[] keyBytes = StreamUtils.copyToByteArray(resource.getInputStream());
-//        return new String(keyBytes, StandardCharsets.UTF_8);
-//    }
-    private String readKeyFromFile(String path) throws Exception {
-        // "file:" prefix가 있으면 제거
-        if (path.startsWith("file:")) {
-            path = path.substring(5);
-        }
-
-        try (InputStream inputStream = new FileInputStream(path)) {
-            return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
-        }
+    private String readKeyFromFile(Resource resource) throws Exception {
+        byte[] keyBytes = StreamUtils.copyToByteArray(resource.getInputStream());
+        return new String(keyBytes, StandardCharsets.UTF_8);
     }
 }
 

@@ -1,0 +1,46 @@
+name: Deploy
+
+on:
+  workflow_run:
+    workflows: [ "Build" ]
+    branches: [ dev, 'feature/*' ]
+    types:
+      - completed
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: dev
+
+    steps:
+      - name: ▶️ Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: ▶️ Deploy to AWS EC2
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.DEV_AWS_PUBLIC_HOST }}
+          username: ubuntu
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          script: |
+            echo "🔐 Logged into EC2"
+            
+            # GHCR 로그인
+            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+            
+            docker rm -f culture-spot-batch || true
+            docker pull ghcr.io/${{ github.repository }}/batch:latest
+            docker run -d --name culture-spot-batch \
+              ghcr.io/${{ github.repository }}/batch:latest
+            
+            docker rm -f culture-spot-api || true
+            docker pull ghcr.io/${{ github.repository }}/api:latest
+            docker run -d -p 8080:8080 --name culture-spot-api \
+              -e SPRING_PROFILE=dev \
+              --env-file /app/env/domain-module.env \
+              --env-file /app/env/serviceApi-module.env \
+              -v /home/ubuntu/app/keys:/app/keys \
+              -v /home/ubuntu/app/env:/app/env \
+              ghcr.io/${{ github.repository }}/api:latest
+            
+            echo "🚀 All services deployed successfully"

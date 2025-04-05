@@ -38,10 +38,10 @@ jobs:
             docker pull ghcr.io/${{ github.repository }}/api:latest
             docker run -d -p 8080:8080 --name culture-spot-api \
               -e SPRING_PROFILE=dev \
+              --env-file /home/ubuntu/app/env/domain-module.env \
+              --env-file /home/ubuntu/app/env/serviceApi-module.env \
               -v /home/ubuntu/app/keys:/app/keys \
               -v /home/ubuntu/app/env:/app/env \
-              --env-file /app/env/domain-module.env \
-              --env-file /app/env/serviceApi-module.env \
               ghcr.io/${{ github.repository }}/api:latest
             
             echo "🚀 All services deployed successfully"

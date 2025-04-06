@@ -33,6 +33,7 @@ jobs:
       # 🔐 PEM 파일 복호화 및 저장
       - name: ▶️ Decode private.pem & public.pem
         run: |
+          mkdir -p ./CultureSpot-Domain/src/main/resources
           echo "${{ secrets.JWT_PRIVATE_KEY_B64 }}" | base64 -d > ./CultureSpot-Domain/src/main/resources/private.pem
           echo "${{ secrets.JWT_PUBLIC_KEY_B64 }}" | base64 -d > ./CultureSpot-Domain/src/main/resources/public.pem
 

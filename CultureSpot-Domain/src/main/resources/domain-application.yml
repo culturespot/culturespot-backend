@@ -10,8 +10,8 @@ spring:
         - dev
     default: local
 
-  config:
-    import: optional:file:env/domain-module.env[.properties]
+#  config:
+#    import: optional:file:env/domain-module.env[.properties]
   servlet:
     multipart:
       enabled: true

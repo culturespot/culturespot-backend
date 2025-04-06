@@ -1,5 +1,6 @@
 name: Deploy
 
+
 on:
   workflow_run:
     workflows: [ "Build" ]
@@ -10,40 +11,33 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: dev
 
     steps:
       - name: ▶️ Checkout Repository
         uses: actions/checkout@v4
 
-      - name: ▶️ Set up SSH
-        uses: webfactory/ssh-agent@v0.5.3
-        with:
-          ssh-private-key: ${{ secrets.DEV_AWS_ACCESS_KEY }}
-
       - name: ▶️ Deploy to AWS EC2
-        run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@${{ secrets.DEV_AWS_PUBLIC_HOST }} << 'EOF'
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.DEV_AWS_PUBLIC_HOST }}
+          username: ubuntu
+          key: ${{ secrets.AWS_PRIVATE_KEY }}
+          script: |
             echo "🔐 Logged into EC2"
-          
+            
             # GHCR 로그인
             docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-          
-            # -------------------------
-            # 1. Batch 서비스 배포
-            # -------------------------
+            
             docker rm -f culture-spot-batch || true
             docker pull ghcr.io/${{ github.repository }}/batch:latest
             docker run -d --name culture-spot-batch \
               ghcr.io/${{ github.repository }}/batch:latest
-
-            # -------------------------
-            # 2. API 서비스 배포
-            # -------------------------
+            
             docker rm -f culture-spot-api || true
             docker pull ghcr.io/${{ github.repository }}/api:latest
             docker run -d -p 8080:8080 --name culture-spot-api \
               -e SPRING_PROFILE=dev \
               ghcr.io/${{ github.repository }}/api:latest
-
+            
             echo "🚀 All services deployed successfully"
-          EOF

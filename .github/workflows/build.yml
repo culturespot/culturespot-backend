@@ -8,6 +8,7 @@ on:
   pull_request:
     branches:
       - dev
+      - master
 
 jobs:
   build:
@@ -29,6 +30,13 @@ jobs:
       - name: ▶️ Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
+      # 🔐 PEM 파일 복호화 및 저장
+      - name: ▶️ Decode private.pem & public.pem
+        run: |
+          mkdir -p ./CultureSpot-Domain/src/main/resources
+          echo "${{ secrets.JWT_PRIVATE_KEY_B64 }}" | base64 -d > ./CultureSpot-Domain/src/main/resources/private.pem
+          echo "${{ secrets.JWT_PUBLIC_KEY_B64 }}" | base64 -d > ./CultureSpot-Domain/src/main/resources/public.pem
+
       # Gradle 빌드
       - name: ▶️ Build with Gradle
         env:
@@ -42,14 +50,9 @@ jobs:
           DEV_DOCKER_SPRING_DATASOURCE_URL: "${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_URL }}"
           DEV_DOCKER_SPRING_DATASOURCE_USERNAME: "${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_USERNAME }}"
 
-          # S3
-          DEV_S3_BUCKET_NAME: "${{ secrets.DEV_S3_BUCKET_NAME }}"
-
           # Auth
           GOOGLE_CLIENT_ID: "${{ secrets.GOOGLE_CLIENT_ID }}"
           GOOGLE_CLIENT_SECRET: "${{ secrets.GOOGLE_CLIENT_SECRET }}"
-          JWT_PRIVATE_KEY: "${{ secrets.JWT_PRIVATE_KEY }}"
-          JWT_PUBLIC_KEY: "${{ secrets.JWT_PUBLIC_KEY }}"
 
           MINIO_ACCESS_KEY: "${{ secrets.MINIO_ACCESS_KEY }}"
           MINIO_BUCKET_NAME: "${{ secrets.MINIO_BUCKET_NAME }}"
@@ -59,6 +62,12 @@ jobs:
         run: |
           ./gradlew clean 
           ./gradlew build --parallel -x test
+
+      # 빌드 후 PEM 파일 삭제 (선택)
+      - name: 🔐 Delete PEM files
+        run: |
+          rm -f ./CultureSpot-Domain/src/main/resources/private.pem
+          rm -f ./CultureSpot-Domain/src/main/resources/public.pem
 
       - name: ▶️ Log in to GitHub Container Registry
         uses: docker/login-action@v2

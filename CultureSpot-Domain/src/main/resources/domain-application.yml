@@ -25,7 +25,7 @@ spring:
     defer-datasource-initialization: true
 
   jwt:
-    private-key-pem:
-    public-key-pem:
+    public-key-pem: ${JWT_PUBLIC_KEY}
+    private-key-pem: ${JWT_PRIVATE_KEY}
     access-expiration-time: 1800  # Access Token 만료 시간 (30분)
     refresh-expiration-time: 1209600  # Refresh Token 만료 시간 (14일)

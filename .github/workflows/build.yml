@@ -33,9 +33,11 @@ jobs:
       # 🔐 PEM 파일 복호화 및 저장
       - name: ▶️ Decode private.pem & public.pem
         run: |
-          mkdir -p ./CultureSpot-Domain/src/main/resources
-          echo "${{ secrets.JWT_PRIVATE_KEY }}" | base64 -d > ./CultureSpot-Domain/src/main/resources/private.pem
-          echo "${{ secrets.JWT_PUBLIC_KEY }}" | base64 -d > ./CultureSpot-Domain/src/main/resources/public.pem
+          mkdir -p ./CultureSpot-Domain/src/main/resources/key
+          echo "${{ secrets.JWT_PRIVATE_KEY }}" | base64 -d > ./CultureSpot-Domain/src/main/resources/key/private.pem
+          echo "${{ secrets.JWT_PUBLIC_KEY }}" | base64 -d > ./CultureSpot-Domain/src/main/resources/key/public.pem
+          chmod 644 ./CultureSpot-Domain/src/main/resources/key/private.pem
+          chmod 644 ./CultureSpot-Domain/src/main/resources/key/public.pem
 
       # Gradle 빌드
       - name: ▶️ Build with Gradle

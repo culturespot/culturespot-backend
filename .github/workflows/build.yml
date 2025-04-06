@@ -49,8 +49,8 @@ jobs:
           # Auth
           GOOGLE_CLIENT_ID: "${{ secrets.GOOGLE_CLIENT_ID }}"
           GOOGLE_CLIENT_SECRET: "${{ secrets.GOOGLE_CLIENT_SECRET }}"
-          JWT_PRIVATE_KEY: "${{ secrets.JWT_PRIVATE_KEY }}"
-          JWT_PUBLIC_KEY: "${{ secrets.JWT_PUBLIC_KEY }}"
+          spring.jwt.private-key-pem: ${{ secrets.JWT_PRIVATE_KEY }}
+          spring.jwt.public-key-pem: ${{ secrets.JWT_PUBLIC_KEY }}
 
           MINIO_ACCESS_KEY: "${{ secrets.MINIO_ACCESS_KEY }}"
           MINIO_BUCKET_NAME: "${{ secrets.MINIO_BUCKET_NAME }}"

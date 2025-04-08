@@ -1,4 +1,4 @@
-package com.culturespot.culturespotdomain.core.refreshToken.handler;
+package com.culturespot.culturespotserviceapi.core.auth.handler;
 
 import com.culturespot.culturespotdomain.core.refreshToken.service.RefreshTokenService;
 import com.culturespot.culturespotdomain.core.user.entity.SocialLoginType;

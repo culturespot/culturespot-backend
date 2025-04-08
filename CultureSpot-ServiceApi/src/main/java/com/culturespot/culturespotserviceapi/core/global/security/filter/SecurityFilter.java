@@ -1,11 +1,10 @@
 package com.culturespot.culturespotserviceapi.core.global.security.filter;
 
-import com.culturespot.culturespotdomain.core.refreshToken.handler.OAuth2AuthenticationSuccessHandler;
+import com.culturespot.culturespotserviceapi.core.auth.handler.OAuth2AuthenticationSuccessHandler;
 import com.culturespot.culturespotserviceapi.core.auth.resolver.CustomOAuth2AuthorizationRequestResolver;
 import com.culturespot.culturespotserviceapi.core.auth.userInfo.CustomOAuth2UserService;
 import com.culturespot.culturespotserviceapi.core.global.security.config.CorsConfig;
 import com.culturespot.culturespotserviceapi.core.global.security.endpoint.EndpointType;
-import com.culturespot.culturespotserviceapi.core.global.security.filter.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,4 +1,3 @@
-
 name: Deploy
 
 on:
@@ -24,14 +23,19 @@ jobs:
           username: ubuntu
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           script: |
+            set -e
             echo "🔐 Logged into EC2"
-            
+
+            # 네트워크 생성 (이미 있으면 무시)
+            docker network create culture-net || true
+
             # GHCR 로그인
             docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
 
-            # ✅ MySQL 컨테이너 재시작
+            # ✅ MySQL 재시작
             docker rm -f culture-spot-mysql || true
             docker run -d --name culture-spot-mysql \
+              --network culture-net \
               -e MYSQL_ROOT_PASSWORD=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_PASSWORD }} \
               -e MYSQL_DATABASE=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_DBNAME }} \
               -e MYSQL_USER=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_USERNAME }} \
@@ -40,17 +44,28 @@ jobs:
               -v /home/ubuntu/mysql-data:/var/lib/mysql \
               mysql:8.0
             echo "✅ MySQL Started"
-            
+
+            # ✅ .env 파일 존재 확인
+            [ -f /home/ubuntu/app/env/domain-module.env ] || {
+              echo "❌ .env 파일이 없습니다! 배포 중단합니다."
+              exit 1
+            }
+
+            # ✅ Batch 컨테이너
             docker rm -f culture-spot-batch || true
             docker pull ghcr.io/${{ github.repository }}/batch:latest
             docker run -d --name culture-spot-batch \
+              --network culture-net \
               --env-file /home/ubuntu/app/env/domain-module.env \
               ghcr.io/${{ github.repository }}/batch:latest
-            
+
+            # ✅ API 컨테이너
             docker rm -f culture-spot-api || true
             docker pull ghcr.io/${{ github.repository }}/api:latest
             docker run -d -p 8080:8080 --name culture-spot-api \
+              --network culture-net \
               --env-file /home/ubuntu/app/env/domain-module.env \
-              -e SPRING_PROFILE=dev \
+              -e SPRING_PROFILES_ACTIVE=dev \
               ghcr.io/${{ github.repository }}/api:latest
-            
+
+            docker image prune -f

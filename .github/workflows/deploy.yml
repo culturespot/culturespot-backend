@@ -32,10 +32,10 @@ jobs:
             # ✅ MySQL 컨테이너 재시작
             docker rm -f culture-spot-mysql || true
             docker run -d --name culture-spot-mysql \
-              -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
-              -e MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }} \
+              -e MYSQL_ROOT_PASSWORD=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_PASSWORD }} \
+              -e MYSQL_DATABASE=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_URL }} \
               -e MYSQL_USER=${{ secrets.MYSQL_USER }} \
-              -e MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }} \
+              -e MYSQL_PASSWORD=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_USERNAME }} \
               -p 3306:3306 \
               -v /home/ubuntu/mysql-data:/var/lib/mysql \
               mysql:8.0

@@ -34,8 +34,8 @@ jobs:
             docker run -d --name culture-spot-mysql \
               -e MYSQL_ROOT_PASSWORD=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_PASSWORD }} \
               -e MYSQL_DATABASE=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_URL }} \
-              -e MYSQL_USER=${{ secrets.MYSQL_USER }} \
-              -e MYSQL_PASSWORD=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_USERNAME }} \
+              -e MYSQL_USER=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_USERNAME }} \
+              -e MYSQL_PASSWORD=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_PASSWORD }} \
               -p 3306:3306 \
               -v /home/ubuntu/mysql-data:/var/lib/mysql \
               mysql:8.0

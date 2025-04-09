@@ -24,21 +24,53 @@ jobs:
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           script: |
             echo "🔐 Logged into EC2"
-            
-            # GHCR 로그인
+
+            # ✅ GHCR 로그인
             docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-            
+
+            # ✅ MySQL 컨테이너 실행
+            docker rm -f culture-spot-mysql || true
+            docker run -d --name culture-spot-mysql \
+              -e MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }} \
+              -e MYSQL_DATABASE=culturespot \
+              -e MYSQL_USER=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_USERNAME }} \
+              -e MYSQL_PASSWORD=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_PASSWORD }} \
+              -p 3306:3306 \
+              -v /home/ubuntu/mysql-data:/var/lib/mysql \
+              mysql:8.0
+
+            echo "✅ MySQL Started"
+
+            # ✅ 배치 서버 실행
             docker rm -f culture-spot-batch || true
             docker pull ghcr.io/${{ github.repository }}/batch:latest
             docker run -d --name culture-spot-batch \
-              --env-file /home/ubuntu/app/env/domain-module.env \
+              -e SPRING_PROFILE=dev \
+              -e DEV_DOCKER_SPRING_DATASOURCE_URL=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_URL }} \
+              -e DEV_DOCKER_SPRING_DATASOURCE_USERNAME=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_USERNAME }} \
+              -e DEV_DOCKER_SPRING_DATASOURCE_PASSWORD=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_PASSWORD }} \
+              -e MYSQL_INIT_DML_SQL_PATH=${{ secrets.MYSQL_INIT_DML_SQL_PATH }} \
               ghcr.io/${{ github.repository }}/batch:latest
-            
+
+            echo "✅ Batch Started"
+
+            # ✅ API 서버 실행
             docker rm -f culture-spot-api || true
             docker pull ghcr.io/${{ github.repository }}/api:latest
             docker run -d -p 8080:8080 --name culture-spot-api \
-              --env-file /home/ubuntu/app/env/domain-module.env \
               -e SPRING_PROFILE=dev \
+              -e DEV_DOCKER_SPRING_DATASOURCE_URL=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_URL }} \
+              -e DEV_DOCKER_SPRING_DATASOURCE_USERNAME=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_USERNAME }} \
+              -e DEV_DOCKER_SPRING_DATASOURCE_PASSWORD=${{ secrets.DEV_DOCKER_SPRING_DATASOURCE_PASSWORD }} \
+              -e MYSQL_INIT_DML_SQL_PATH=${{ secrets.MYSQL_INIT_DML_SQL_PATH }} \
+              -e DEV_AWS_REGION=${{ secrets.DEV_AWS_REGION }} \
+              -e DEV_AWS_ACCESS_KEY=${{ secrets.DEV_AWS_ACCESS_KEY }} \
+              -e DEV_AWS_SECRET_KEY=${{ secrets.DEV_AWS_SECRET_KEY }} \
+              -e DEV_S3_BUCKET_NAME=${{ secrets.DEV_S3_BUCKET_NAME }} \
+              -e MINIO_ENDPOINT=${{ secrets.MINIO_ENDPOINT }} \
+              -e MINIO_BUCKET_NAME=${{ secrets.MINIO_BUCKET_NAME }} \
+              -e MINIO_ACCESS_KEY=${{ secrets.MINIO_ACCESS_KEY }} \
+              -e MINIO_SECRET_KEY=${{ secrets.MINIO_SECRET_KEY }} \
               ghcr.io/${{ github.repository }}/api:latest
-            
+
             echo "🚀 All services deployed successfully"

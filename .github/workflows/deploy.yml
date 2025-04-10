@@ -16,20 +16,19 @@ jobs:
       - name: ▶️ Checkout Repository
         uses: actions/checkout@v4
 
-      - name: ▶️ Deploy to AWS EC2 (Direct Docker Run)
+      - name: ▶️ Deploy to AWS EC2 via SSH
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.DEV_AWS_PUBLIC_HOST }}
           username: ubuntu
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           script: |
-            echo "🔐 Logged into EC2"
-            echo "📦 Starting Docker-based deployment"
+            echo "🔐 EC2 접속 완료"
 
-            # ✅ 1. 공통 네트워크 생성 (한 번만 실행됨)
+            # ✅ 공통 네트워크 생성 (이미 있다면 에러 없이 넘어감)
             docker network create culture-network || true
 
-            # ✅ 2. MySQL 컨테이너 실행
+            # ✅ 1. MySQL 컨테이너 정리 및 실행
             docker rm -f culture-mysql || true
             docker run -d --name culture-mysql --network culture-network \
               -e MYSQL_ROOT_PASSWORD=culturespot \
@@ -38,17 +37,19 @@ jobs:
               -v mysql_data:/var/lib/mysql \
               mysql:8.0
 
-            echo "⏳ Waiting for MySQL to initialize..."
+            echo "⏳ MySQL 초기화 대기 중..."
             sleep 15
 
-            # ✅ 3. 배치 서버 컨테이너 실행
+            docker ps -a
+
+            # ✅ 2. 배치 서버 정리 및 실행
             docker rm -f culture-spot-batch || true
             docker pull ghcr.io/${{ github.repository }}/batch:latest
             docker run -d --name culture-spot-batch --network culture-network \
               --env-file /home/ubuntu/app/env/domain-module.env \
               ghcr.io/${{ github.repository }}/batch:latest
 
-            # ✅ 4. API 서버 컨테이너 실행
+            # ✅ 3. API 서버 정리 및 실행
             docker rm -f culture-spot-api || true
             docker pull ghcr.io/${{ github.repository }}/api:latest
             docker run -d -p 8080:8080 --name culture-spot-api --network culture-network \
@@ -56,4 +57,5 @@ jobs:
               -e SPRING_PROFILE=dev \
               ghcr.io/${{ github.repository }}/api:latest
 
-            echo "🚀 All containers deployed successfully"
+            echo "🚀 모든 컨테이너 실행 완료"
+            docker ps -a

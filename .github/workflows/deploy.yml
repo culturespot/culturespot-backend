@@ -45,12 +45,6 @@ jobs:
               mysql:8.0
             echo "✅ MySQL Started"
 
-            # ✅ .env 파일 존재 확인
-            [ -f /home/ubuntu/app/env/domain-module.env ] || {
-              echo "❌ .env 파일이 없습니다! 배포 중단합니다."
-              exit 1
-            }
-
             # ✅ Batch 컨테이너
             docker rm -f culture-spot-batch || true
             docker pull ghcr.io/${{ github.repository }}/batch:latest

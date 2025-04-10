@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 /*
 *   ✅ 구글 소셜 로그인 요청 URI : http://localhost:8080/oauth2/authorization/google
+*   ✅ 카카오 소셜 로그인 요청 URI : http://localhost:8080/oauth2/authorization/kakao
 *   ✅ 소셜 로그인 통합 로그아웃 요청 URI : POST /api/public/logout
-*
 * */
 
 @RestController

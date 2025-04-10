@@ -1,6 +1,8 @@
 package com.culturespot.culturespotserviceapi.core.global.security.filter;
 
 import com.culturespot.culturespotserviceapi.core.auth.handler.OAuth2AuthenticationSuccessHandler;
+import com.culturespot.culturespotserviceapi.core.auth.handler.OAuth2AuthenticationFailureHandler;
+import com.culturespot.culturespotserviceapi.core.auth.handler.OAuth2AuthenticationSuccessHandler;
 import com.culturespot.culturespotserviceapi.core.auth.resolver.CustomOAuth2AuthorizationRequestResolver;
 import com.culturespot.culturespotserviceapi.core.auth.userInfo.CustomOAuth2UserService;
 import com.culturespot.culturespotserviceapi.core.global.security.config.CorsConfig;
@@ -24,6 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityFilter {
     private final OAuth2AuthenticationSuccessHandler oAuth2SuccessHandler;
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
@@ -56,7 +59,7 @@ public class SecurityFilter {
                     auth.anyRequest().authenticated();
                 });
 
-        // ✅ 인증되지 않은 사용자가 보호된 리소스에 접근 시 401 반환 (리다이렉트 X)
+        // ✅ 인증되지 않은 사용자가 보호된 리소스에 접근 시 403 반환 (리다이렉트 X)
         http
                 .exceptionHandling(exception ->
                     exception.authenticationEntryPoint(new Http403ForbiddenEntryPoint())  // 403 Forbidden 반환
@@ -64,12 +67,12 @@ public class SecurityFilter {
 
         http
                 .oauth2Login(oauth2 -> oauth2
-                        .redirectionEndpoint(endpoint -> endpoint.baseUri(EndpointType.GOOGLE_LOGIN_PATH))
                         .authorizationEndpoint(authEndpoint -> authEndpoint
                                 .authorizationRequestResolver(customOAuth2AuthorizationRequestResolver)
                         )
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService))
                         .successHandler(oAuth2SuccessHandler)
+                        .failureHandler(oAuth2AuthenticationFailureHandler)
                 );
 
         // ✅ JWT 인증 필터 추가 (기본 인증 필터보다 먼저 실행됨)

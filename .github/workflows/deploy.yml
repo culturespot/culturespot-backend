@@ -1,4 +1,3 @@
-
 name: Deploy
 
 on:
@@ -17,7 +16,7 @@ jobs:
       - name: ▶️ Checkout Repository
         uses: actions/checkout@v4
 
-      - name: ▶️ Deploy to AWS EC2
+      - name: ▶️ Deploy to AWS EC2 (Direct Docker Run)
         uses: appleboy/ssh-action@v0.1.10
         with:
           host: ${{ secrets.DEV_AWS_PUBLIC_HOST }}
@@ -25,21 +24,36 @@ jobs:
           key: ${{ secrets.AWS_PRIVATE_KEY }}
           script: |
             echo "🔐 Logged into EC2"
-            
-            # GHCR 로그인
-            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
-            
+            echo "📦 Starting Docker-based deployment"
+
+            # ✅ 1. 공통 네트워크 생성 (한 번만 실행됨)
+            docker network create culture-network || true
+
+            # ✅ 2. MySQL 컨테이너 실행
+            docker rm -f culture-mysql || true
+            docker run -d --name culture-mysql --network culture-network \
+              -e MYSQL_ROOT_PASSWORD=culturespot \
+              -e MYSQL_DATABASE=culturespot \
+              -p 3306:3306 \
+              -v mysql_data:/var/lib/mysql \
+              mysql:8.0
+
+            echo "⏳ Waiting for MySQL to initialize..."
+            sleep 15
+
+            # ✅ 3. 배치 서버 컨테이너 실행
             docker rm -f culture-spot-batch || true
             docker pull ghcr.io/${{ github.repository }}/batch:latest
-            docker run -d --name culture-spot-batch \
+            docker run -d --name culture-spot-batch --network culture-network \
               --env-file /home/ubuntu/app/env/domain-module.env \
               ghcr.io/${{ github.repository }}/batch:latest
-            
+
+            # ✅ 4. API 서버 컨테이너 실행
             docker rm -f culture-spot-api || true
             docker pull ghcr.io/${{ github.repository }}/api:latest
-            docker run -d -p 8080:8080 --name culture-spot-api \
+            docker run -d -p 8080:8080 --name culture-spot-api --network culture-network \
               --env-file /home/ubuntu/app/env/domain-module.env \
               -e SPRING_PROFILE=dev \
               ghcr.io/${{ github.repository }}/api:latest
-            
-            echo "🚀 All services deployed successfully"
+
+            echo "🚀 All containers deployed successfully"

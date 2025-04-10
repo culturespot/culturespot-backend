@@ -1,0 +1,11 @@
+spring:
+  config:
+    import:
+      - optional:classpath:domain-application.yml
+      - optional:classpath:domain-application-${spring.profiles.active}.yml
+  batch:
+    jdbc:
+      initialize-schema: always
+
+open-api:
+  service-key: ${OPEN_API_KEY}

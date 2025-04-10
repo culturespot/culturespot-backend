@@ -39,4 +39,4 @@ spring:
       initialize-schema: never
 
 discord:
-  webhook: spearkkk
+  webhook: ${DISCORD_WEBHOOK_URL}

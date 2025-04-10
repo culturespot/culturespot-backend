@@ -25,6 +25,9 @@ jobs:
           script: |
             echo "🔐 EC2 접속 완료"
 
+            # GHCR 로그인
+            docker login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+
             # ✅ 공통 네트워크 생성 (이미 있다면 에러 없이 넘어감)
             docker network create culture-network || true
 

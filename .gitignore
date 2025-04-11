@@ -28,6 +28,8 @@ bin/
 !CultureSpot-Domain/src/main/resources/domai-application-prod.yml
 !CultureSpot-Domain/src/main/resources/domai-application-test.yml
 
+!CultureSpot-Batch/src/main/resources/application.yml
+
 # domain-module.env
 env/domain-module.env
 env/serviceApi-module.env

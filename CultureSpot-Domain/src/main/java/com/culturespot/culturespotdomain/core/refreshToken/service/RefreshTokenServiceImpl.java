@@ -22,7 +22,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Override
     @Transactional
     public RefreshToken saveRefreshToken(String userEmail, SocialLoginType authType, String refreshToken) {
-        User user = userService.createUserIfNotExists(userEmail, authType);
+        User user = userService.registerUserIfNotExists(userEmail, authType);
         refreshTokenRepository.deleteByUser(user);
         return refreshTokenRepository.save(buildRefreshToken(user, refreshToken));
     }

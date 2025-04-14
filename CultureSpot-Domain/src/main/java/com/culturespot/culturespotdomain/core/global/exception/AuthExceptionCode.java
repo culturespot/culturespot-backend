@@ -18,6 +18,7 @@ public enum AuthExceptionCode {
     SIGNATURE_REFRESH_TOKEN(TOKEN.code + 82, "Refresh token 서명이 유효하지 않습니다."),
 
     ROLE(900),
+    INVALID_ROLE(ROLE.code + 1, "잘못된 권합입니다. 관리자에게 문의하세요."),
 
     USER(800),
     USER_NOT_FOUND(USER.code + 1, "사용자를 찾을 수 없습니다."),

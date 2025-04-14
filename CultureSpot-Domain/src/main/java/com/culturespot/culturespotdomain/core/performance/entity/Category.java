@@ -1,5 +1,12 @@
 package com.culturespot.culturespotdomain.core.performance.entity;
 
+import lombok.Getter;
+
+import java.util.Arrays;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+@Getter
 public enum Category {
 
   EXHIBITION("전시"),
@@ -28,4 +35,15 @@ public enum Category {
     }
     return ETC;
   }
+
+  public static Category fromString(String value) {
+    return Arrays.stream(Category.values())
+            .filter(category -> category.getName().equals(value))
+            .findFirst()
+            .orElse(Category.ETC);
+  }
+
+  private static final Set<String> VALID_NAMES = Arrays.stream(values())
+          .map(Category::getName)
+          .collect(Collectors.toSet());
 }

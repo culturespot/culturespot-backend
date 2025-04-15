@@ -8,6 +8,7 @@ import com.culturespot.culturespotserviceapi.core.global.utils.response.NamedWra
 import com.culturespot.culturespotserviceapi.core.user.dto.request.UserProfileRequest;
 import com.culturespot.culturespotserviceapi.core.user.dto.response.UserProfileResponse;
 import com.culturespot.culturespotserviceapi.core.user.mapper.UserMapper;
+import com.culturespot.culturespotserviceapi.core.user.spec.UserControllerSpec;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api")
-public class UserController {
+public class UserController implements UserControllerSpec {
     private final UserService userService;
     private final UserMapper userMapper;
 
@@ -27,12 +28,12 @@ public class UserController {
     public ApiResponse getUserProfile(@Auth User user) {
         User targetUser = userService.findUserOrThrow(user.getEmail());
         UserProfileResponse response = userMapper.userToUserProfileResponse(targetUser);
-        return new NamedWrapper("user", response);
+        return new NamedWrapper<>("user", response);
     }
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @PutMapping("/profiles")
-    public void getUserProfiles(
+    public void updateUserProfile(
             @Auth User user,
             @Valid @RequestBody UserProfileRequest request
     ) {

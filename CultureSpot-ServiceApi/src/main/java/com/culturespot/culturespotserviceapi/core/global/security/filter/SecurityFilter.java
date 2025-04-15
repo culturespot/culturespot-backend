@@ -54,6 +54,13 @@ public class SecurityFilter {
         // ✅ 엔드포인트 접근 권한 설정
         http
                 .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers(
+                            "/v3/api-docs/**",
+                            "/swagger-ui.html",
+                            "/swagger-ui/**",
+                            "/swagger-ui/index.html",
+                            "/v3/api-docs/swagger-config"
+                    ).permitAll();
                     auth.requestMatchers(EndpointType.PUBLIC.getPath()).permitAll();
                     auth.requestMatchers(EndpointType.USER.getPath()).authenticated();
                     auth.requestMatchers(EndpointType.ADMIN.getPath()).hasRole("ADMIN");

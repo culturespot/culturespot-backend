@@ -1,10 +1,10 @@
-package com.culturespot.culturespotserviceapi.core.user.spec;
+package com.culturespot.culturespotserviceapi.core.user.controller.spec;
 
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotserviceapi.core.global.swagger.SwaggerErrorResponse;
-import com.culturespot.culturespotserviceapi.core.global.utils.response.ApiResponse;
 import com.culturespot.culturespotserviceapi.core.user.dto.request.UserProfileRequest;
-import com.culturespot.culturespotserviceapi.core.user.spec.description.UserControllerDescription;
+import com.culturespot.culturespotserviceapi.core.user.dto.response.UserProfileResponse;
+import com.culturespot.culturespotserviceapi.core.user.controller.spec.description.UserControllerDescription;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -24,7 +24,7 @@ public interface UserControllerSpec {
                             description = UserControllerDescription.GET_USER_PROFILE_200_RESPONSE,
                             content = @Content(
                                     mediaType = "application/json",
-                                    schema = @Schema(implementation = SwaggerUserProfileResponse.class))
+                                    schema = @Schema(implementation = UserProfileResponse.class))
                     ),
                     @io.swagger.v3.oas.annotations.responses.ApiResponse(
                             responseCode = "801",
@@ -37,7 +37,7 @@ public interface UserControllerSpec {
 
             }
     )
-    ApiResponse getUserProfile(@Parameter(hidden = true) User user);
+    UserProfileResponse getUserProfile(@Parameter(hidden = true) User user);
 
 
     @Operation(

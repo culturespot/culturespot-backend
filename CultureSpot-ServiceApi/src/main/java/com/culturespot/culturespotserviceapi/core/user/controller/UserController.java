@@ -3,12 +3,10 @@ package com.culturespot.culturespotserviceapi.core.user.controller;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotdomain.core.user.service.UserService;
 import com.culturespot.culturespotserviceapi.core.auth.annotation.Auth;
-import com.culturespot.culturespotserviceapi.core.global.utils.response.ApiResponse;
-import com.culturespot.culturespotserviceapi.core.global.utils.response.NamedWrapper;
 import com.culturespot.culturespotserviceapi.core.user.dto.request.UserProfileRequest;
 import com.culturespot.culturespotserviceapi.core.user.dto.response.UserProfileResponse;
 import com.culturespot.culturespotserviceapi.core.user.mapper.UserMapper;
-import com.culturespot.culturespotserviceapi.core.user.spec.UserControllerSpec;
+import com.culturespot.culturespotserviceapi.core.user.controller.spec.UserControllerSpec;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,10 +23,9 @@ public class UserController implements UserControllerSpec {
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @GetMapping("/profiles")
     @ResponseStatus(HttpStatus.OK)
-    public ApiResponse getUserProfile(@Auth User user) {
+    public UserProfileResponse getUserProfile(@Auth User user) {
         User targetUser = userService.findUserOrThrow(user.getEmail());
-        UserProfileResponse response = userMapper.userToUserProfileResponse(targetUser);
-        return new NamedWrapper<>("user", response);
+        return userMapper.userToUserProfileResponse(targetUser);
     }
 
     @PreAuthorize("hasAuthority('ROLE_USER')")

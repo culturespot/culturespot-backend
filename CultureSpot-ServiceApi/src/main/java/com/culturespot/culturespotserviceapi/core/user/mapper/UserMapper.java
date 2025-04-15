@@ -19,13 +19,13 @@ import java.util.Arrays;
 public interface UserMapper {
 
     @Mappings ({
-        @Mapping(source = "id", target = "userId"),
-        @Mapping(source = "nickname", target = "username"),
-        @Mapping(source = "authType", target = "platform"),
-        @Mapping(source = "email", target = "email"),
-        @Mapping(source = "profileCode", target = "profileCode"),
+        @Mapping(source = "id", target = "user.userId"),
+        @Mapping(source = "nickname", target = "user.username"),
+        @Mapping(source = "authType", target = "user.platform"),
+        @Mapping(source = "email", target = "user.email"),
+        @Mapping(source = "profileCode", target = "user.profileCode"),
         @Mapping(
-                target = "preferredGenres",
+                target = "user.preferredGenres",
                 expression = "java(new ArrayList<>(user.getPreferredCategory().values()))"
         )
     })

@@ -1,4 +1,4 @@
-package com.culturespot.culturespotserviceapi.core.user.spec.description;
+package com.culturespot.culturespotserviceapi.core.user.controller.spec.description;
 
 public class UserControllerDescription {
     public static final String GET_USER_PROFILE_200_RESPONSE = """

@@ -1,7 +1,7 @@
 package com.culturespot.culturespotserviceapi.core.user.controller.spec;
 
 import com.culturespot.culturespotdomain.core.user.entity.User;
-import com.culturespot.culturespotserviceapi.core.global.swagger.SwaggerErrorResponse;
+import com.culturespot.culturespotserviceapi.common.swagger.SwaggerErrorResponse;
 import com.culturespot.culturespotserviceapi.core.user.dto.request.UserProfileRequest;
 import com.culturespot.culturespotserviceapi.core.user.dto.response.UserProfileResponse;
 import com.culturespot.culturespotserviceapi.core.user.controller.spec.description.UserControllerDescription;

@@ -10,7 +10,7 @@ import com.culturespot.culturespotserviceapi.core.post.dto.request.PostModifyReq
 import com.culturespot.culturespotserviceapi.core.post.dto.response.PostSingleResponse;
 import com.culturespot.culturespotserviceapi.core.auth.annotation.Auth;
 import com.culturespot.culturespotserviceapi.core.auth.annotation.MemberOnly;
-import com.culturespot.culturespotserviceapi.core.global.security.endpoint.EndpointType;
+import com.culturespot.culturespotserviceapi.common.security.endpoint.EndpointType;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

@@ -1,11 +1,11 @@
-package com.culturespot.culturespotserviceapi.core.global.security.filter;
+package com.culturespot.culturespotserviceapi.common.security.filter;
 
+import com.culturespot.culturespotserviceapi.common.security.config.CorsConfig;
+import com.culturespot.culturespotserviceapi.common.security.endpoint.EndpointType;
 import com.culturespot.culturespotserviceapi.core.auth.handler.OAuth2AuthenticationSuccessHandler;
 import com.culturespot.culturespotserviceapi.core.auth.handler.OAuth2AuthenticationFailureHandler;
 import com.culturespot.culturespotserviceapi.core.auth.resolver.CustomOAuth2AuthorizationRequestResolver;
 import com.culturespot.culturespotserviceapi.core.auth.userInfo.CustomOAuth2UserService;
-import com.culturespot.culturespotserviceapi.core.global.security.config.CorsConfig;
-import com.culturespot.culturespotserviceapi.core.global.security.endpoint.EndpointType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

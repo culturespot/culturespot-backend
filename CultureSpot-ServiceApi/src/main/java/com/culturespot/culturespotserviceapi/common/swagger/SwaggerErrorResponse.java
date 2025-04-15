@@ -1,4 +1,4 @@
-package com.culturespot.culturespotserviceapi.core.global.swagger;
+package com.culturespot.culturespotserviceapi.common.swagger;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

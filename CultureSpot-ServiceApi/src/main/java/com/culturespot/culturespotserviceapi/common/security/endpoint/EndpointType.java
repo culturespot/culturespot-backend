@@ -1,4 +1,4 @@
-package com.culturespot.culturespotserviceapi.core.global.security.endpoint;
+package com.culturespot.culturespotserviceapi.common.security.endpoint;
 
 public enum EndpointType {
     PUBLIC("/api/public/**"),

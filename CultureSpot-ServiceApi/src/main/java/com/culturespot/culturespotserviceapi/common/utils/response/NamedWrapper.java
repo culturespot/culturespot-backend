@@ -1,4 +1,4 @@
-package com.culturespot.culturespotserviceapi.core.global.utils.response;
+package com.culturespot.culturespotserviceapi.common.utils.response;
 
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import java.util.Map;

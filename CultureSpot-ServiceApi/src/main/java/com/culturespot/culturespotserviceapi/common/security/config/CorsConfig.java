@@ -1,4 +1,4 @@
-package com.culturespot.culturespotserviceapi.core.global.security.config;
+package com.culturespot.culturespotserviceapi.common.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

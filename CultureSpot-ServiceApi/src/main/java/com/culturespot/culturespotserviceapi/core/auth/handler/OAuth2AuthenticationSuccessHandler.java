@@ -5,7 +5,7 @@ import com.culturespot.culturespotdomain.core.user.entity.SocialLoginType;
 import com.culturespot.culturespotdomain.core.global.jwt.JwtTokenManager;
 import com.culturespot.culturespotserviceapi.core.auth.dto.response.LoginSuccessResponse;
 import com.culturespot.culturespotserviceapi.core.auth.strategy.OAuth2LoginSuccessHandler;
-import com.culturespot.culturespotserviceapi.core.global.utils.CookieUtils;
+import com.culturespot.culturespotserviceapi.common.utils.CookieUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;

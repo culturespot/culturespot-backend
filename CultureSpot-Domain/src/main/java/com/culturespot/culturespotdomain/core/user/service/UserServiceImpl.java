@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public User registerUserIfNotExists(String email, SocialLoginType authType) {
         return userRepository.findByEmail(email)
                 .orElseGet(() -> {

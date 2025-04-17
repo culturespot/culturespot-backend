@@ -33,11 +33,12 @@ public class Performance extends BaseEntity {
   @Column
   private String seq;
 
-  @Column
-  private String type;
+  @Enumerated(EnumType.STRING)
+  @Column(columnDefinition = "VARCHAR(50)")
+  private Event type;
 
   @Enumerated(EnumType.STRING)
-  @Column
+  @Column(columnDefinition = "VARCHAR(50)")
   private Category category;
 
   @Column

@@ -1,14 +1,13 @@
 package com.culturespot.culturespotbatch.job.performance;
 
 import com.culturespot.culturespotdomain.core.performance.entity.Category;
+import com.culturespot.culturespotdomain.core.performance.entity.Event;
 import com.culturespot.culturespotdomain.core.performance.entity.Performance;
 import com.culturespot.culturespotdomain.core.performance.entity.PerformanceInfo;
 import com.culturespot.external.api.dto.PerformanceDetailResponse;
 import com.culturespot.external.api.dto.PerformanceResponse;
-import com.google.common.collect.ImmutableSet;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Set;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -17,14 +16,12 @@ import org.mapstruct.Named;
 @Mapper(componentModel = "spring")
 public interface PerformanceMapper {
 
-  Set<String> exhibitionValues = ImmutableSet.of("전시", "미술", "건축", "영상", "문학", "문화정책");
-
   @Mappings({
       @Mapping(target = "seq", source = "item.seq"),
       @Mapping(target = "title", source = "item.title"),
       @Mapping(target = "startDate", source = "item.startDate", qualifiedByName = "stringToLocalDate"),
       @Mapping(target = "endDate", source = "item.endDate", qualifiedByName = "stringToLocalDate"),
-      @Mapping(target = "type", source = "item.realmName", qualifiedByName = "realmNameToType"),
+      @Mapping(target = "type", expression = "java(realmNameToType(item.getServiceName(), item.getRealmName()))"),
       @Mapping(target = "category", source = "item.realmName", qualifiedByName = "realmNameToCategory"),
       @Mapping(target = "place", source = "detailItem.place"),
       @Mapping(target = "address", source = "detailItem.placeAddr"),
@@ -66,10 +63,20 @@ public interface PerformanceMapper {
   }
 
   @Named("realmNameToType")
-  default String realmNameToType(String realmName) {
-    if (exhibitionValues.contains(realmName)) {
-      return "EXHIBITION";
+  default Event realmNameToType(String serviceName, String realmName) {
+    Category category = Category.fromName(realmName);
+    if (Category.EXHIBITION == category || Category.MUSIC_CONCERT == category) {
+      return Event.PERFORMANCE_EXHIBITION;
     }
-    return "PERFORMANCE";
+
+    if (Category.EVENT_FESTIVAL == category) {
+      return Event.EVENT_FESTIVAL;
+    }
+
+    if (Category.EDU_EXPERIENCE == category) {
+      return Event.EDU_EXPERIENCE;
+    }
+
+    return Event.fromName(serviceName);
   }
 }

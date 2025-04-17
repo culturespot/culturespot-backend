@@ -13,4 +13,13 @@ public enum Event {
     Event(String name) {
         this.value = name;
     }
+
+    public static Event fromName(String name) {
+        for (Event event : values()) {
+            if (event.value.equalsIgnoreCase(name)) {
+                return event;
+            }
+        }
+        return PERFORMANCE_EXHIBITION;
+    }
 }

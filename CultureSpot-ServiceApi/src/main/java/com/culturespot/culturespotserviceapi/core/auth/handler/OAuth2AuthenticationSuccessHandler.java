@@ -56,6 +56,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String refreshToken = jwtTokenManager.createRefreshToken(email);
 
         response.setHeader("Authorization", "Bearer " + accessToken); // access token 헤더에 추가
+        response.sendRedirect("http://localhost:3000"); // 수정필요
 
         // ✅ Refresh Token을 HttpOnly & Secure 쿠키에 저장
         Cookie refreshTokenCookie = CookieUtils.createSecureCookie(
@@ -66,15 +67,15 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         // ✅ refreshToken db 저장 (SocialLoginType 포함)
         refreshTokenService.saveRefreshToken(email,  SocialLoginType.fromRegistrationId(registrationId), refreshToken);
 
-//        // ✅ JSON 응답 설정
-//        response.setStatus(HttpServletResponse.SC_OK);
-//        response.setContentType("application/json");
-//        response.setCharacterEncoding("UTF-8");
-//
-//        // ✅ 응답 객체 생성 & 사용자 최신 로그인 시간 업데이트
-//        LoginSuccessResponse responseDto = oAuth2LoginSuccessHandler.handle(registrationId, email);
+        // ✅ JSON 응답 설정
+        response.setStatus(HttpServletResponse.SC_OK);
+        response.setContentType("application/json");
+        response.setCharacterEncoding("UTF-8");
 
-        // ✅ 리디렉트 (프론트 페이지로 이동)
-        response.sendRedirect("http://localhost:3000");
+        // ✅ 응답 객체 생성 & 사용자 최신 로그인 시간 업데이트
+        LoginSuccessResponse responseDto = oAuth2LoginSuccessHandler.handle(registrationId, email);
+
+        new ObjectMapper()
+                .writeValue(response.getWriter(), responseDto);
     }
 }

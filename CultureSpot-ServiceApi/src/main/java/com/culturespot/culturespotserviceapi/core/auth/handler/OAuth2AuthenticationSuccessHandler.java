@@ -56,6 +56,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         String refreshToken = jwtTokenManager.createRefreshToken(email);
 
         response.setHeader("Authorization", "Bearer " + accessToken); // access token 헤더에 추가
+        response.setHeader("redirect_uri", "http://localhost:3000"); // 수정필요
 
         // ✅ Refresh Token을 HttpOnly & Secure 쿠키에 저장
         Cookie refreshTokenCookie = CookieUtils.createSecureCookie(

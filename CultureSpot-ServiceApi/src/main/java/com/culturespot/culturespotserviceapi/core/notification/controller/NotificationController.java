@@ -57,4 +57,13 @@ public class NotificationController {
 
     return mapper.toNotifincationResponse(maybeUpdatedNotification.get());
   }
+
+  @MemberOnly
+  @PutMapping(value = "/api/users/notifications/read-all")
+  public List<NotificationResponse> readWholeNotifications(@Auth User user) {
+    log.info("NotificationController get request to read whole notifications.");
+
+    List<Notification> notifications = service.readWholeNotifications(user.getId());
+    return mapper.toNotifincationResponses(notifications);
+  }
 }

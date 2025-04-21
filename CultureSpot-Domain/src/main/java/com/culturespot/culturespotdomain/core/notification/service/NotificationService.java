@@ -49,4 +49,14 @@ public class NotificationService {
     Notification shouldBeUpdatedNotification = notification.toBuilder().hasBeenRead(true).build();
     return Optional.of(repository.save(shouldBeUpdatedNotification));
   }
+
+  @Transactional(propagation = Propagation.REQUIRED)
+  public List<Notification> readWholeNotifications(Long userId) {
+    List<Notification> notifications = repository.findAllByUserIdAndHasBeenReadIsFalse(userId);
+
+    List<Notification> shouldBeUpdatedNotifications = notifications.stream()
+        .map(it -> it.toBuilder().hasBeenRead(true).build()).toList();
+
+    return repository.saveAll(shouldBeUpdatedNotifications);
+  }
 }

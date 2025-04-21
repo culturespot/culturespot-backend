@@ -50,7 +50,7 @@ public class NotificationController {
   public NotificationResponse readNotification(@PathVariable Long notificationId, @Auth User user) {
     log.info("NotificationController get request to read notification. `notificationId`: {}",
         notificationId);
-    Optional<Notification> maybeUpdatedNotification = service.read(notificationId);
+    Optional<Notification> maybeUpdatedNotification = service.read(user.getId(), notificationId);
     if (maybeUpdatedNotification.isEmpty()) {
       throw new NoSuchElementException("Not found notification");
     }

@@ -18,7 +18,10 @@ public enum DomainExceptionCode {
     STORAGE(3000),
     FILE_NOT_FOUND(STORAGE.code + 1, "파일명을 찾을 수 없습니다."),
     FILE_UPLOAD_FAIL(STORAGE.code + 2, "파일 업로드에 실패하였습니다. 관리자에게 문의하세요."),
-    FILE_DELETE_FAIL(STORAGE.code + 2, "파일 삭제에 실패했습니다. 관리자에게 문의하세요.");
+    FILE_DELETE_FAIL(STORAGE.code + 2, "파일 삭제에 실패했습니다. 관리자에게 문의하세요."),
+
+    NOTIFICATION(4000),
+    NOTIFICATION_EDIT_PERMISSION_DENIED(NOTIFICATION.code + 1, "알림을 수정할 권한이 없습니다.");
 
 
     private final int code;

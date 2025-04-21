@@ -1,12 +1,12 @@
 package com.culturespot.culturespotdomain.core.global.exception;
 
+import java.util.Map;
+import java.util.NoSuchElementException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MissingRequestCookieException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
-import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -46,6 +46,17 @@ public class GlobalExceptionHandler {
                         "code", "MISSING_COOKIE_EXCEPTION",
                         "message", "포함해야하는 쿠키 값이 누락되었습니다. 확인해주세요."
                 ));
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public ResponseEntity<Map<String, Object>> handleNoSuchElementException(
+        NoSuchElementException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body(Map.of(
+                    "code", "404",
+                    "message", e.getMessage()
+                )
+            );
     }
 
     /* ✅ 예상하지 못한 RuntimeException 처리 */

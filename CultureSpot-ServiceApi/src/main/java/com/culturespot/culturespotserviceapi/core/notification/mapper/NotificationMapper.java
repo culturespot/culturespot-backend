@@ -14,9 +14,10 @@ import org.mapstruct.Named;
 public interface NotificationMapper {
 
   @Mapping(source = "contents", target = "contents", qualifiedByName = "stringToMap")
-  NotificationResponse toNotificationResponse(Notification notification);
+  NotificationResponse.NotificationResponseItem toNotificationResponse(Notification notification);
 
-  List<NotificationResponse> toNotificationResponses(List<Notification> notifications);
+  List<NotificationResponse.NotificationResponseItem> toNotificationResponses(
+      List<Notification> notifications);
 
   @Named("stringToMap")
   default Map<String, Object> stringToMap(String contents) {

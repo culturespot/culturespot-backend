@@ -6,6 +6,7 @@ import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotserviceapi.core.auth.annotation.Auth;
 import com.culturespot.culturespotserviceapi.core.auth.annotation.MemberOnly;
 import com.culturespot.culturespotserviceapi.core.notification.dto.response.NotificationResponse;
+import com.culturespot.culturespotserviceapi.core.notification.dto.response.NotificationResponse.NotificationResponseItem;
 import com.culturespot.culturespotserviceapi.core.notification.mapper.NotificationMapper;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -33,7 +34,7 @@ public class NotificationController {
 
   @MemberOnly
   @GetMapping(value = "/api/users/notifications")
-  public List<NotificationResponse> getNotifications(
+  public NotificationResponse getNotifications(
       @PositiveOrZero
       @RequestParam(required = false, defaultValue = "1") Long page,
       @Min(1)
@@ -51,12 +52,18 @@ public class NotificationController {
     List<Notification> notifications = service.getNotificationsBy(user.getId(), lastId, page, size);
     log.info("A number of notifications is {}.", notifications.size());
 
-    return mapper.toNotificationResponses(notifications);
+    List<NotificationResponseItem> items = mapper.toNotificationResponses(notifications);
+    return NotificationResponse.builder()
+        .page(page)
+        .size(size)
+        .notifications(items)
+        .build();
   }
 
   @MemberOnly
   @PutMapping(value = "/api/users/notifications/{notificationId}/read")
-  public NotificationResponse readNotification(@PathVariable Long notificationId, @Auth User user) {
+  public NotificationResponse.NotificationResponseItem readNotification(
+      @PathVariable Long notificationId, @Auth User user) {
     log.info("NotificationController get request to read notification. `notificationId`: {}",
         notificationId);
     Optional<Notification> maybeUpdatedNotification = service.read(user.getId(), notificationId);
@@ -69,7 +76,8 @@ public class NotificationController {
 
   @MemberOnly
   @PutMapping(value = "/api/users/notifications/read-all")
-  public List<NotificationResponse> readWholeNotifications(@Auth User user) {
+  public List<NotificationResponse.NotificationResponseItem> readWholeNotifications(
+      @Auth User user) {
     log.info("NotificationController get request to read whole notifications.");
 
     List<Notification> notifications = service.readWholeNotifications(user.getId());

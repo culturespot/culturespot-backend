@@ -1,7 +1,7 @@
 FROM rockylinux:8
 
 ENV TZ=Asia/Seoul
-RUN timedatectl set-timezone $TZ
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 # Install OpenJDK 17 and dumb-init
 RUN yum install -y epel-release && \

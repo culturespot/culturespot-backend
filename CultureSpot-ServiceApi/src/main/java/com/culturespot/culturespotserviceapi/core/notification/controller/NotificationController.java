@@ -7,11 +7,15 @@ import com.culturespot.culturespotserviceapi.core.auth.annotation.Auth;
 import com.culturespot.culturespotserviceapi.core.auth.annotation.MemberOnly;
 import com.culturespot.culturespotserviceapi.core.notification.dto.response.NotificationResponse;
 import com.culturespot.culturespotserviceapi.core.notification.mapper.NotificationMapper;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
+@Validated
 @RestController
 public class NotificationController {
 
@@ -29,8 +34,12 @@ public class NotificationController {
   @MemberOnly
   @GetMapping(value = "/api/users/notifications")
   public List<NotificationResponse> getNotifications(
+      @PositiveOrZero
       @RequestParam(required = false, defaultValue = "1") Long page,
+      @Min(1)
+      @Max(50)
       @RequestParam(required = false, defaultValue = "10") Long size,
+      @PositiveOrZero
       @RequestParam(required = false, defaultValue = "0") Long lastId,
       @Auth User user
   ) {

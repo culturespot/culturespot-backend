@@ -1,5 +1,8 @@
 FROM rockylinux:8
 
+ENV TZ=Asia/Seoul
+RUN timedatectl set-timezone $TZ
+
 # Install OpenJDK 17 and dumb-init
 RUN yum install -y epel-release && \
     yum install -y java-17-openjdk dumb-init

@@ -19,7 +19,7 @@ public class NotificationRepositoryImpl implements NotificationRepositoryCustom 
   public List<Notification> seekAllByUserIdAndGreaterThanIdWithPagination(Long userId, Long id,
       Pageable pageRequest) {
     return entityManager.createQuery(
-            "SELECT n FROM Notification n WHERE n.userId = :userId AND n.id > :id ORDER BY n.createdAt DESC",
+            "SELECT n FROM Notification n WHERE n.userId = :userId AND n.id > :id ORDER BY n.id DESC",
             Notification.class)
         .setParameter("userId", userId)
         .setParameter("id", id)

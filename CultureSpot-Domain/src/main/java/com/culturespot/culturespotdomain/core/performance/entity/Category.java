@@ -1,5 +1,8 @@
 package com.culturespot.culturespotdomain.core.performance.entity;
 
+import lombok.Getter;
+
+@Getter
 public enum Category {
   THEATER("A000", "연극"),
   MUSIC_CONCERT("B000", "음악/콘서트"),

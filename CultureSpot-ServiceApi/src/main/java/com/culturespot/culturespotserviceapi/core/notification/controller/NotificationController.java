@@ -42,7 +42,7 @@ public class NotificationController {
     List<Notification> notifications = service.getNotificationsBy(user.getId(), lastId, page, size);
     log.info("A number of notifications is {}.", notifications.size());
 
-    return mapper.toNotifincationResponses(notifications);
+    return mapper.toNotificationResponses(notifications);
   }
 
   @MemberOnly
@@ -55,7 +55,7 @@ public class NotificationController {
       throw new NoSuchElementException("Not found notification");
     }
 
-    return mapper.toNotifincationResponse(maybeUpdatedNotification.get());
+    return mapper.toNotificationResponse(maybeUpdatedNotification.get());
   }
 
   @MemberOnly
@@ -64,6 +64,6 @@ public class NotificationController {
     log.info("NotificationController get request to read whole notifications.");
 
     List<Notification> notifications = service.readWholeNotifications(user.getId());
-    return mapper.toNotifincationResponses(notifications);
+    return mapper.toNotificationResponses(notifications);
   }
 }

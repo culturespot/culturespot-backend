@@ -1,7 +1,6 @@
 package com.culturespot.culturespotserviceapi.core.performance.controller.spec;
 
 import com.culturespot.culturespotdomain.core.performance.entity.Category;
-import com.culturespot.culturespotserviceapi.common.dto.Paging;
 import com.culturespot.culturespotserviceapi.common.dto.Sort;
 import com.culturespot.culturespotserviceapi.core.performance.controller.spec.description.PerformanceControllerDescription;
 import com.culturespot.culturespotserviceapi.core.performance.dto.response.PerformanceListResponse;
@@ -10,8 +9,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springdoc.core.annotations.ParameterObject;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name="PUBLIC-행사정보 API")
@@ -33,9 +30,11 @@ public interface PerformanceControllerSpec {
             }
     )
     PerformanceListResponse getPerformances(
-            @ParameterObject Paging paging,
             @RequestParam Event event,
+            @RequestParam Category category,
             @RequestParam Sort sort,
-            @RequestParam Category category
+            @RequestParam int size,
+            @RequestParam Long lastId,
+            @RequestParam(required = false) String keyword
     );
 }

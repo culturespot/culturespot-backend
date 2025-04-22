@@ -3,16 +3,16 @@ package com.culturespot.culturespotserviceapi.core.performance.dto.response;
 import com.culturespot.culturespotdomain.core.performance.entity.Category;
 import com.culturespot.culturespotdomain.core.performance.entity.Event;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 public record PerformanceResponse(
-        int id,
+        Long id,
         String title,
-        Event eventType,
+        Event event,
         Category category,
         String place,
-        Instant startDate,
-        Instant endDate,
+        LocalDate startDate,
+        LocalDate endDate,
         String imageUrl,
         boolean liked
 ) {

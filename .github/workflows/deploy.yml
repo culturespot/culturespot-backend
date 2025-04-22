@@ -6,6 +6,7 @@ on:
     branches: [ dev ]
     types:
       - completed
+    if: github.event.workflow_run.conclusion == 'success'
 
 jobs:
   deploy:
@@ -65,3 +66,6 @@ jobs:
 
             echo "🚀 모든 컨테이너 실행 완료"
             docker ps -a
+            
+            echo "불필요한 도커이미지 삭제"
+            docker image prune -f

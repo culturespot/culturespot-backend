@@ -40,7 +40,7 @@ public class User extends BaseEntity {
 
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(name="preferred_category", columnDefinition="json")
-    Map<Category, String> preferredCategory = new HashMap<>();
+    Map<String, List<Category>> preferredCategory = new HashMap<>();
 
     @Column(name="last_login_at", nullable = false)
     private LocalDateTime lastLoginAt;
@@ -57,7 +57,7 @@ public class User extends BaseEntity {
             Set<UserRole> roles,
             int profileCode,
             LocalDateTime lastLoginAt,
-            Map<Category, String> preferredCategory
+            Map<String, List<Category>> preferredCategory
     ){
         this.email = email;
         this.nickname = nickname;
@@ -75,9 +75,13 @@ public class User extends BaseEntity {
 
     public void updatePreferredCategory(List<String> categories) {
         preferredCategory.clear();
+        List<Category> categoriesList = new ArrayList<>();
+
         for (String categoryName : categories) {
             Category category = Category.fromString(categoryName);
-            preferredCategory.put(category, category.getName());
+            categoriesList.add(category);
         }
+
+        preferredCategory.put("select", categoriesList);
     }
 }

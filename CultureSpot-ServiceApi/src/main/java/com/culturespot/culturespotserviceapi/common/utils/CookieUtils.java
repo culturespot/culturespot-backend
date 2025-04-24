@@ -1,4 +1,4 @@
-package com.culturespot.culturespotserviceapi.core.global.utils;
+package com.culturespot.culturespotserviceapi.common.utils;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;

@@ -1,8 +1,8 @@
 package com.culturespot.culturespotserviceapi.core.auth.controller;
 
 import com.culturespot.culturespotdomain.core.refreshToken.service.RefreshTokenService;
-import com.culturespot.culturespotserviceapi.core.global.security.endpoint.EndpointType;
-import com.culturespot.culturespotserviceapi.core.global.utils.CookieUtils;
+import com.culturespot.culturespotserviceapi.common.security.endpoint.EndpointType;
+import com.culturespot.culturespotserviceapi.common.utils.CookieUtils;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;

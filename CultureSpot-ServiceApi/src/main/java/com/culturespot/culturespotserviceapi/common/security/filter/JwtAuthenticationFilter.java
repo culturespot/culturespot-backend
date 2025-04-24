@@ -1,4 +1,4 @@
-package com.culturespot.culturespotserviceapi.core.global.security.filter;
+package com.culturespot.culturespotserviceapi.common.security.filter;
 
 import com.culturespot.culturespotdomain.core.global.jwt.JwtTokenManager;
 import jakarta.servlet.FilterChain;

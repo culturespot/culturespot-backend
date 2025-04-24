@@ -48,33 +48,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         // 사용자 조회 또는 생성
         User user = userRepository.findByEmail(email)
-                .orElseGet(() -> createNewUser(email, authType));
+                .orElseGet(() -> userService.registerUserIfNotExists(email, authType));
 
         // 사용자의 권한 조회 및 GrantedAuthority 변환
         List<GrantedAuthority> authorities = getUserAuthorities(user);
 
         // `OAuth2User`를 커스텀 객체로 감싸서 반환 (권한 포함)
         return new CustomOAuth2User(oauth2User, email, authorities);
-    }
-
-    private User createNewUser(String email, SocialLoginType authType) {
-        User createUser = userService.createUser(email, authType);
-
-        // 기본 권한 부여
-        Role role = roleRepository.findByRoleType(UserRoleType.USER)
-                .orElseThrow(() -> new RuntimeException("ROLE_USER가 존재하지 않습니다."));
-
-        User savedUser = userRepository.save(createUser);
-
-        // 사용자-권한 매핑 저장
-        UserRole userRoleMapping = UserRole.builder()
-                .user(savedUser)
-                .role(role)
-                .build();
-
-        userRoleRepository.save(userRoleMapping);
-
-        return savedUser;
     }
 
     private List<GrantedAuthority> getUserAuthorities(User user) {

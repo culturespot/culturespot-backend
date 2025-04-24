@@ -3,10 +3,9 @@ package com.culturespot.culturespotserviceapi.core.auth.handler;
 import com.culturespot.culturespotdomain.core.refreshToken.service.RefreshTokenService;
 import com.culturespot.culturespotdomain.core.user.entity.SocialLoginType;
 import com.culturespot.culturespotdomain.core.global.jwt.JwtTokenManager;
+import com.culturespot.culturespotserviceapi.common.utils.CookieUtils;
 import com.culturespot.culturespotserviceapi.core.auth.dto.response.LoginSuccessResponse;
 import com.culturespot.culturespotserviceapi.core.auth.strategy.OAuth2LoginSuccessHandler;
-import com.culturespot.culturespotserviceapi.common.utils.CookieUtils;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -66,15 +65,20 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         // ✅ refreshToken db 저장 (SocialLoginType 포함)
         refreshTokenService.saveRefreshToken(email,  SocialLoginType.fromRegistrationId(registrationId), refreshToken);
 
-        // ✅ JSON 응답 설정
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-
-        // ✅ 응답 객체 생성 & 사용자 최신 로그인 시간 업데이트
+        // ✅ 최신 로그인 시간 업데이트
         LoginSuccessResponse responseDto = oAuth2LoginSuccessHandler.handle(registrationId, email);
 
-        new ObjectMapper()
-                .writeValue(response.getWriter(), responseDto);
+        String targetUrl = determineTargetUrl(request);
+        getRedirectStrategy().sendRedirect(request, response, targetUrl);
+    }
+
+    protected String determineTargetUrl(HttpServletRequest request) {
+        String redirectUri = request.getParameter("redirect_uri");
+        if (redirectUri != null && !redirectUri.isBlank()) {
+            return redirectUri;
+        }
+
+        // 수정 필요
+        return "";
     }
 }

@@ -1,7 +1,7 @@
 package com.culturespot.culturespotserviceapi.core.performance.controller.spec;
 
 import com.culturespot.culturespotdomain.core.performance.entity.Category;
-import com.culturespot.culturespotserviceapi.common.dto.Sort;
+import com.culturespot.culturespotdomain.core.performance.entity.Sort;
 import com.culturespot.culturespotserviceapi.core.performance.controller.spec.description.PerformanceControllerDescription;
 import com.culturespot.culturespotserviceapi.core.performance.dto.response.PerformanceListResponse;
 import com.culturespot.culturespotdomain.core.performance.entity.Event;

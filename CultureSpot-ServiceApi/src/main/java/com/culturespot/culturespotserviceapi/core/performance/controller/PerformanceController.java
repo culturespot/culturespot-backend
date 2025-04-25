@@ -2,7 +2,7 @@ package com.culturespot.culturespotserviceapi.core.performance.controller;
 
 import com.culturespot.culturespotdomain.core.performance.entity.Category;
 import com.culturespot.culturespotdomain.core.performance.entity.Event;
-import com.culturespot.culturespotserviceapi.common.dto.Sort;
+import com.culturespot.culturespotdomain.core.performance.entity.Sort;
 import com.culturespot.culturespotserviceapi.common.security.endpoint.EndpointType;
 import com.culturespot.culturespotserviceapi.core.performance.controller.spec.PerformanceControllerSpec;
 import com.culturespot.culturespotserviceapi.core.performance.dto.response.PerformanceListResponse;
@@ -22,9 +22,9 @@ public class PerformanceController implements PerformanceControllerSpec {
 
     @GetMapping
     public PerformanceListResponse getPerformances(
-            @RequestParam Event event,
+            @RequestParam(required = false) Event event,
             @RequestParam(required = false) Category category,
-            @RequestParam Sort sort,
+            @RequestParam(required = false) Sort sort,
             @RequestParam int size,
             @RequestParam(required = false) Long lastId,
             @RequestParam(required = false) String keyword

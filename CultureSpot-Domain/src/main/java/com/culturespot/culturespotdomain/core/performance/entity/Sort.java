@@ -1,4 +1,4 @@
-package com.culturespot.culturespotserviceapi.common.dto;
+package com.culturespot.culturespotdomain.core.performance.entity;
 
 import lombok.Getter;
 

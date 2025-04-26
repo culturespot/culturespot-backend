@@ -2,29 +2,25 @@ package com.culturespot.culturespotdomain.core.user.service;
 
 import com.culturespot.culturespotdomain.core.global.exception.AuthException;
 import com.culturespot.culturespotdomain.core.global.exception.AuthExceptionCode;
-import com.culturespot.culturespotdomain.core.role.entity.Role;
-import com.culturespot.culturespotdomain.core.role.entity.UserRoleType;
-import com.culturespot.culturespotdomain.core.role.repository.RoleRepository;
 import com.culturespot.culturespotdomain.core.notification.entity.Notification;
 import com.culturespot.culturespotdomain.core.notification.repository.NotificationRepository;
 import com.culturespot.culturespotdomain.core.performance.entity.Category;
 import com.culturespot.culturespotdomain.core.performance.entity.Performance;
 import com.culturespot.culturespotdomain.core.performance.repository.PerformanceRepository;
+import com.culturespot.culturespotdomain.core.role.entity.Role;
+import com.culturespot.culturespotdomain.core.role.entity.UserRoleType;
+import com.culturespot.culturespotdomain.core.role.repository.RoleRepository;
 import com.culturespot.culturespotdomain.core.user.entity.SocialLoginType;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotdomain.core.user.entity.UserRole;
 import com.culturespot.culturespotdomain.core.user.repository.UserRepository;
-import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -36,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.compress.utils.Lists;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 
 @Slf4j
 @AllArgsConstructor
@@ -105,37 +102,39 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public void updateLastLoginAt(User user) {
-        // TODO: TBD
-        Set<Category> preferredCategories = Set.of(Category.EXHIBITION);
-        LocalDateTime lastLoginAt = user.getLastLoginAt();
+        if (!CollectionUtils.isEmpty(user.getPreferredCategory())) {
+            Set<Category> preferredCategories = user.getPreferredCategory().values().stream()
+                .flatMap(Collection::stream).collect(Collectors.toSet());
+            LocalDateTime lastLoginAt = user.getLastLoginAt();
 
-        List<Performance> updatedPerformances = performanceRepository.findAllByUpdatedAtAfterAndCategoryIsIn(
-            lastLoginAt, preferredCategories);
+            List<Performance> updatedPerformances = performanceRepository.findAllByUpdatedAtAfterAndCategoryIsIn(
+                lastLoginAt, preferredCategories);
 
-        List<Notification> shouldBeSavedNotifications = Lists.newArrayList();
-        for (Performance it : updatedPerformances) {
-            PerformanceNotification performanceNotification = PerformanceNotification.builder()
-                .performanceId(it.getId())
-                .performanceType(it.getType().getValue())
-                .performanceCategory(it.getCategory().getName())
-                .performanceTitle(it.getTitle())
-                .performanceStartDate(it.getStartDate())
-                .performanceEndDate(it.getEndDate())
-                .performancePlace(it.getPlace())
-                .build();
-
-            try {
-                Notification notification = Notification.builder()
-                    .userId(user.getId())
-                    .hasBeenRead(false)
-                    .contents(OBJECT_MAPPER.writeValueAsString(performanceNotification))
+            List<Notification> shouldBeSavedNotifications = Lists.newArrayList();
+            for (Performance it : updatedPerformances) {
+                PerformanceNotification performanceNotification = PerformanceNotification.builder()
+                    .performanceId(it.getId())
+                    .performanceType(it.getType().getValue())
+                    .performanceCategory(it.getCategory().getName())
+                    .performanceTitle(it.getTitle())
+                    .performanceStartDate(it.getStartDate())
+                    .performanceEndDate(it.getEndDate())
+                    .performancePlace(it.getPlace())
                     .build();
-                shouldBeSavedNotifications.add(notification);
-            } catch (JsonProcessingException e) {
-                log.warn("Notifications cannot be created. `userId`: {}", user.getId(), e);
+
+                try {
+                    Notification notification = Notification.builder()
+                        .userId(user.getId())
+                        .hasBeenRead(false)
+                        .contents(OBJECT_MAPPER.writeValueAsString(performanceNotification))
+                        .build();
+                    shouldBeSavedNotifications.add(notification);
+                } catch (JsonProcessingException e) {
+                    log.warn("Notifications cannot be created. `userId`: {}", user.getId(), e);
+                }
             }
+            notificationRepository.saveAll(shouldBeSavedNotifications);
         }
-        notificationRepository.saveAll(shouldBeSavedNotifications);
 
         userRepository.updateLastLoginAt(user.getId(), LocalDateTime.now());
     }

@@ -2,6 +2,9 @@ package com.culturespot.culturespotdomain.core.user.service;
 
 import com.culturespot.culturespotdomain.core.global.exception.AuthException;
 import com.culturespot.culturespotdomain.core.global.exception.AuthExceptionCode;
+import com.culturespot.culturespotdomain.core.role.entity.Role;
+import com.culturespot.culturespotdomain.core.role.entity.UserRoleType;
+import com.culturespot.culturespotdomain.core.role.repository.RoleRepository;
 import com.culturespot.culturespotdomain.core.notification.entity.Notification;
 import com.culturespot.culturespotdomain.core.notification.repository.NotificationRepository;
 import com.culturespot.culturespotdomain.core.performance.entity.Category;
@@ -9,7 +12,13 @@ import com.culturespot.culturespotdomain.core.performance.entity.Performance;
 import com.culturespot.culturespotdomain.core.performance.repository.PerformanceRepository;
 import com.culturespot.culturespotdomain.core.user.entity.SocialLoginType;
 import com.culturespot.culturespotdomain.core.user.entity.User;
+import com.culturespot.culturespotdomain.core.user.entity.UserRole;
 import com.culturespot.culturespotdomain.core.user.repository.UserRepository;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +27,6 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,6 +50,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
     private final PerformanceRepository performanceRepository;
     private final NotificationRepository notificationRepository;
 
@@ -52,48 +61,45 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new AuthException(AuthExceptionCode.USER_NOT_FOUND));
     }
 
-    /**
-     * 사용자가 존재하지 않으면 새로 생성하고 저장
-     *
-     * @param email 사용자의 이메일
-     * @param authType 소셜 로그인 타입 (예: {@link SocialLoginType#GOOGLE}, {@link SocialLoginType#KAKAO})
-     * @return 생성되거나 기존에 존재하던 {@link User} 객체
-     */
     @Override
-    public User createUserIfNotExists(String email, SocialLoginType authType) {
+    @Transactional
+    public User registerUserIfNotExists(String email, SocialLoginType authType) {
         return userRepository.findByEmail(email)
                 .orElseGet(() -> {
-                    User newUser = createUser(email, authType);
-                    return userRepository.save(newUser);  // 저장 후 반환
+                    User user = createUser(email, authType);
+                    return userRepository.save(user);
                 });
     }
 
     @Override
     public User createUser(String email, SocialLoginType authType) {
-        return User.builder()
+        User user = User.builder()
                 .email(email)
-                .nickname(email)  // 기본적으로 이메일을 닉네임으로 설정
-                .password(UUID.randomUUID().toString()) // 랜덤 패스워드 설정
+                .nickname(email)
                 .authType(authType)
                 .lastLoginAt(LocalDateTime.now())
+                .profileCode((int)(Math.random() * 10_000) + 1)
                 .build();
+
+        Role userRole = roleRepository.findByRoleType(UserRoleType.USER)
+                .orElseThrow(() -> new AuthException(AuthExceptionCode.INVALID_ROLE));
+
+        user.addRole(new UserRole(user, userRole));
+
+        return user;
     }
 
-
-    /**
-     *  사용자가 갖고 있는 권한 조회
-     * <p>
-     * 권한 이름은 {@link com.culturespot.culturespotdomain.core.role.entity.UserRoleType} enum의 name() 값을 기준으로 하며,
-     * 중복 없이 {@link Set} 형태로 반환됩니다.
-     * </p>
-     * @param user 사용자 정보를 담고 있는 {@link User} 객체
-     * @return 사용자가 가진 권한 이름의 집합 (예: "USER", "ADMIN")
-     * */
     @Override
     public Set<String> getRoleNames(User user) {
         return user.getRoles().stream()
                 .map(userRole -> userRole.getRole().getRoleType().name())
                 .collect(Collectors.toSet());
+    }
+
+    @Override
+    @Transactional
+    public User save(User user) {
+        return userRepository.save(user);
     }
 
     @Override

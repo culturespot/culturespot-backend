@@ -25,7 +25,6 @@ public class KeyConfig {
     @Bean
     public PublicKey publicKey() throws Exception {
         String base64PublicKey = readKeyFromFile(publicKeyPath);
-        log.info("base64PublicKey {}", base64PublicKey);
         return KeyBuilder.builder()
                 .setPublicKey(base64PublicKey)
                 .build()
@@ -35,7 +34,6 @@ public class KeyConfig {
     @Bean
     public PrivateKey privateKey() throws Exception {
         String base64PrivateKey = readKeyFromFile(privateKeyPath);
-        log.info("base64PrivateKey {}", base64PrivateKey);
         return KeyBuilder.builder()
                 .setPrivateKey(base64PrivateKey)
                 .build()

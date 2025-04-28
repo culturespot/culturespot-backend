@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
+import java.util.Set;
 
 public interface PerformanceLikeRepository extends JpaRepository<PerformanceLike, Long> {
 
@@ -18,4 +19,9 @@ public interface PerformanceLikeRepository extends JpaRepository<PerformanceLike
             @Param("performanceId") Long performanceId
     );
 
+    @Query("""
+    SELECT pl.performance.id FROM PerformanceLike pl
+    WHERE pl.user.id = :userId
+""")
+    Set<Long> findLikedPerformanceIdsByUserId(@Param("userId") Long userId);
 }

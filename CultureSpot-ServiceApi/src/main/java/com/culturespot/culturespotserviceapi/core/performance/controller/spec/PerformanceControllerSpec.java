@@ -2,6 +2,8 @@ package com.culturespot.culturespotserviceapi.core.performance.controller.spec;
 
 import com.culturespot.culturespotdomain.core.performance.entity.Category;
 import com.culturespot.culturespotdomain.core.performance.entity.Sort;
+import com.culturespot.culturespotdomain.core.user.entity.User;
+import com.culturespot.culturespotserviceapi.core.auth.annotation.Auth;
 import com.culturespot.culturespotserviceapi.core.performance.controller.spec.description.PerformanceControllerDescription;
 import com.culturespot.culturespotserviceapi.core.performance.dto.response.PerformanceListResponse;
 import com.culturespot.culturespotdomain.core.performance.entity.Event;
@@ -30,6 +32,7 @@ public interface PerformanceControllerSpec {
             }
     )
     PerformanceListResponse getPerformances(
+            @Auth User user,
             @RequestParam Event event,
             @RequestParam Category category,
             @RequestParam Sort sort,

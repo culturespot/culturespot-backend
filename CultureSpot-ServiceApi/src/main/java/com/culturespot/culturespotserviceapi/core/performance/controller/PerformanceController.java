@@ -3,7 +3,9 @@ package com.culturespot.culturespotserviceapi.core.performance.controller;
 import com.culturespot.culturespotdomain.core.performance.entity.Category;
 import com.culturespot.culturespotdomain.core.performance.entity.Event;
 import com.culturespot.culturespotdomain.core.performance.entity.Sort;
+import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotserviceapi.common.security.endpoint.EndpointType;
+import com.culturespot.culturespotserviceapi.core.auth.annotation.Auth;
 import com.culturespot.culturespotserviceapi.core.performance.controller.spec.PerformanceControllerSpec;
 import com.culturespot.culturespotserviceapi.core.performance.dto.response.PerformanceListResponse;
 import com.culturespot.culturespotserviceapi.core.performance.service.PerformanceService;
@@ -22,6 +24,7 @@ public class PerformanceController implements PerformanceControllerSpec {
 
     @GetMapping
     public PerformanceListResponse getPerformances(
+            @Auth User user,
             @RequestParam(required = false) Event event,
             @RequestParam(required = false) Category category,
             @RequestParam(required = false) Sort sort,
@@ -29,6 +32,6 @@ public class PerformanceController implements PerformanceControllerSpec {
             @RequestParam(required = false) Long lastId,
             @RequestParam(required = false) String keyword
             ) {
-        return performanceService.getPerformances(event, category, sort, size, lastId, keyword);
+        return performanceService.getPerformances(user, event, category, sort, size, lastId, keyword);
     }
 }

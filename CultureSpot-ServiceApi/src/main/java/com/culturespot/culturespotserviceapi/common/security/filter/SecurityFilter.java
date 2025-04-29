@@ -1,11 +1,11 @@
 package com.culturespot.culturespotserviceapi.common.security.filter;
 
 import com.culturespot.culturespotserviceapi.common.security.config.CorsConfig;
+import com.culturespot.culturespotserviceapi.common.security.endpoint.EndpointType;
 import com.culturespot.culturespotserviceapi.core.auth.handler.OAuth2AuthenticationSuccessHandler;
 import com.culturespot.culturespotserviceapi.core.auth.handler.OAuth2AuthenticationFailureHandler;
 import com.culturespot.culturespotserviceapi.core.auth.resolver.CustomOAuth2AuthorizationRequestResolver;
 import com.culturespot.culturespotserviceapi.core.auth.userInfo.CustomOAuth2UserService;
-import com.culturespot.culturespotserviceapi.common.security.endpoint.EndpointType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,7 +49,7 @@ public class SecurityFilter {
                 .cors(cors -> cors.configurationSource(CorsConfig.corsConfigurationSource()))
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                );
+            );
 
         // ✅ 엔드포인트 접근 권한 설정
         http
@@ -61,11 +61,8 @@ public class SecurityFilter {
                             "/swagger-ui/index.html",
                             "/v3/api-docs/swagger-config"
                     ).permitAll();
-                    auth.requestMatchers(
-                            EndpointType.USER.getPath(),
-                            EndpointType.LOGOUT.getPath(),
-                            EndpointType.REFRESH.getPath()
-                    ).authenticated();
+                    auth.requestMatchers(EndpointType.PUBLIC.getPath()).permitAll();
+                    auth.requestMatchers(EndpointType.USER.getPath()).authenticated();
                     auth.requestMatchers(EndpointType.ADMIN.getPath()).hasRole("ADMIN");
                     auth.anyRequest().authenticated();
                 });
@@ -73,7 +70,7 @@ public class SecurityFilter {
         // ✅ 인증되지 않은 사용자가 보호된 리소스에 접근 시 403 반환 (리다이렉트 X)
         http
                 .exceptionHandling(exception ->
-                        exception.authenticationEntryPoint(new Http403ForbiddenEntryPoint())  // 403 Forbidden 반환
+                    exception.authenticationEntryPoint(new Http403ForbiddenEntryPoint())  // 403 Forbidden 반환
                 );
 
         http

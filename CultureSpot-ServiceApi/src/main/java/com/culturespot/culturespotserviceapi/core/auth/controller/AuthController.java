@@ -1,11 +1,10 @@
 package com.culturespot.culturespotserviceapi.core.auth.controller;
 
 import com.culturespot.culturespotdomain.core.refreshToken.service.RefreshTokenService;
-import com.culturespot.culturespotserviceapi.core.auth.controller.spec.AuthControllerSpec;
 import com.culturespot.culturespotserviceapi.common.security.endpoint.EndpointType;
 import com.culturespot.culturespotserviceapi.common.utils.CookieUtils;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
+import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -17,9 +16,9 @@ import org.springframework.web.bind.annotation.*;
 * */
 
 @RestController
-@RequiredArgsConstructor
-@RequestMapping(EndpointType.API_PATH)
-public class AuthController implements AuthControllerSpec {
+@AllArgsConstructor
+@RequestMapping(EndpointType.PUBLIC_PATH)
+public class AuthController {
     private final RefreshTokenService refreshTokenService;
 
     // ✅ Refresh Token을 사용하여 Access Token 재발급

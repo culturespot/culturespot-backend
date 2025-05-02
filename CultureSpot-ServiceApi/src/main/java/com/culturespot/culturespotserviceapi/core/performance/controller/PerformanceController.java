@@ -7,6 +7,7 @@ import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotserviceapi.core.auth.annotation.Auth;
 import com.culturespot.culturespotserviceapi.core.performance.controller.spec.PerformanceControllerSpec;
 import com.culturespot.culturespotserviceapi.core.performance.dto.response.PerformanceListResponse;
+import com.culturespot.culturespotserviceapi.core.performance.dto.response.PerformanceListSimpleResponse;
 import com.culturespot.culturespotserviceapi.core.performance.service.PerformanceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,4 +34,14 @@ public class PerformanceController implements PerformanceControllerSpec {
             ) {
         return performanceService.getPerformances(user, event, category, sort, size, lastId, keyword);
     }
+
+    @GetMapping("/popular")
+    public PerformanceListSimpleResponse getPopularPerformances(
+            @Auth User user,
+            @RequestParam(required = false) Event event
+    ) {
+        return performanceService.getPopularPerformances(user, event);
+    }
+
+
 }

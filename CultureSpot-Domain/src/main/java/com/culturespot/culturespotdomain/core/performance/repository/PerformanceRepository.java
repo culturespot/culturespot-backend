@@ -30,4 +30,14 @@ public interface PerformanceRepository extends JpaRepository<Performance, Long> 
                                      @Param("keyword") String keyword,
                                      @Param("lastId") Long lastId,
                                      Pageable pageable);
+
+  @Query("""
+    SELECT p
+    FROM Performance p
+    LEFT JOIN PerformanceLike pl ON p.id = pl.performance.id
+    WHERE (:event IS NULL OR p.type = :event)
+    GROUP BY p.id
+    ORDER BY COUNT(pl.id) DESC, p.id DESC
+""")
+  List<Performance> findPopularPerformances(@Param("event") Event event, Pageable pageable);
 }

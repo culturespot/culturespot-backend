@@ -40,4 +40,23 @@ public interface PerformanceRepository extends JpaRepository<Performance, Long> 
     ORDER BY COUNT(pl.id) DESC, p.id DESC
 """)
   List<Performance> findPopularPerformances(@Param("event") Event event, Pageable pageable);
+
+  @Query("""
+    SELECT p
+    FROM Performance p
+    LEFT JOIN PerformanceLike pl ON p.id = pl.performance.id
+    WHERE (:event IS NULL OR p.type = :event)
+      AND p.category IN :categories
+    GROUP BY p.id
+    ORDER BY COUNT(pl.id) DESC, p.id DESC
+""")
+  List<Performance> findPopularPerformancesByCategories(@Param("categories") List<Category> categories, @Param("event") Event event, Pageable pageable);
+
+  @Query("""
+    SELECT p
+    FROM Performance p
+    WHERE (:event IS NULL OR p.type = :event)
+    ORDER BY function('RAND')
+""")
+  List<Performance> findRandomPerformances(Event event, Pageable pageable);
 }

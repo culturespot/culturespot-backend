@@ -49,6 +49,25 @@ public class PerformanceService {
         return new PerformanceListSimpleResponse(responses);
     }
 
+    public PerformanceListSimpleResponse getRecommendedPerformances(User user, Event event) {
+        Pageable pageable = PageRequest.of(0, 20);
+        List<Category> preferredCategories = user.getPreferredCategory().getOrDefault("select", List.of());
+
+        List<Performance> performances;
+        if (!preferredCategories.isEmpty()){
+            performances = performanceRepository.findPopularPerformancesByCategories(preferredCategories, event, pageable);
+        } else {
+            // 카테고리 미선택 시 랜덤 추천
+            performances = performanceRepository.findRandomPerformances(event, pageable);
+        }
+
+        Set<Long> likedIds = getLikedPerformanceIds(user);
+        List<PerformanceResponse> responses = mapToResponseList(performances, likedIds);
+
+        return new PerformanceListSimpleResponse(responses);
+    }
+
+
     // 로그인한 유저가 좋아요 누른 Performance id 목록 조회(비로그인 시 빈 Set)
     private Set<Long> getLikedPerformanceIds(User user){
         return user != null ? likeRepository.findLikedPerformanceIdsByUserId(user.getId()) : Collections.emptySet();
@@ -70,6 +89,4 @@ public class PerformanceService {
                 ))
                 .toList();
     }
-
-
 }

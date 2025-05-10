@@ -24,4 +24,12 @@ public interface PerformanceLikeRepository extends JpaRepository<PerformanceLike
     WHERE pl.user.id = :userId
 """)
     Set<Long> findLikedPerformanceIdsByUserId(@Param("userId") Long userId);
+
+
+    @Query("""
+    SELECT COUNT(pl)
+    FROM PerformanceLike pl
+    WHERE pl.performance.id = :performanceId
+""")
+    int countByPerformanceId(@Param("performanceId") Long performanceId);
 }

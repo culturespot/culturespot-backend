@@ -1,15 +1,10 @@
 package com.culturespot.culturespotserviceapi.core.performance.service;
 
-import com.culturespot.culturespotdomain.core.performance.entity.Category;
-import com.culturespot.culturespotdomain.core.performance.entity.Event;
-import com.culturespot.culturespotdomain.core.performance.entity.Performance;
+import com.culturespot.culturespotdomain.core.performance.entity.*;
 import com.culturespot.culturespotdomain.core.performance.repository.PerformanceLikeRepository;
 import com.culturespot.culturespotdomain.core.performance.repository.PerformanceRepository;
-import com.culturespot.culturespotdomain.core.performance.entity.Sort;
 import com.culturespot.culturespotdomain.core.user.entity.User;
-import com.culturespot.culturespotserviceapi.core.performance.dto.response.PerformanceListResponse;
-import com.culturespot.culturespotserviceapi.core.performance.dto.response.PerformanceListSimpleResponse;
-import com.culturespot.culturespotserviceapi.core.performance.dto.response.PerformanceResponse;
+import com.culturespot.culturespotserviceapi.core.performance.dto.response.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 @Service
@@ -67,6 +63,39 @@ public class PerformanceService {
         return new PerformanceListSimpleResponse(responses);
     }
 
+    public PerformanceDetailResponse getPerformanceDetail(User user, Long eventId) {
+        Performance performance = performanceRepository.findById(eventId)
+                .orElseThrow(() -> new NoSuchElementException("해당 공연이 존재하지 않습니다"));
+
+        PerformanceInfo info = performance.getPerformanceInfo();
+
+        Set<Long> likedIds = getLikedPerformanceIds(user);
+        boolean liked = likedIds.contains(performance.getId());
+
+        // 총 좋아요 수
+        int likeCount = likeRepository.countByPerformanceId(performance.getId());
+
+        PerformanceDetail detail = new PerformanceDetail(
+                performance.getId(),
+                performance.getTitle(),
+                performance.getType(),
+                performance.getCategory(),
+                performance.getPlace(),
+                performance.getStartDate(),
+                performance.getEndDate(),
+                performance.getAddress(),
+                performance.getGpsX(),
+                performance.getGpsY(),
+                info != null ? info.getPrice() : null,
+                info != null ? info.getDescription() : null,
+                info != null ? info.getUrl() : null,
+                info != null ? info.getImageUrl() : null,
+                liked,
+                likeCount
+        );
+
+        return new PerformanceDetailResponse(detail);
+    }
 
     // 로그인한 유저가 좋아요 누른 Performance id 목록 조회(비로그인 시 빈 Set)
     private Set<Long> getLikedPerformanceIds(User user){

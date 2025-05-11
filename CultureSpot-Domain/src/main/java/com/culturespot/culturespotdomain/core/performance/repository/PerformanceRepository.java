@@ -6,7 +6,6 @@ import com.culturespot.culturespotdomain.core.performance.entity.Performance;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -23,13 +22,47 @@ public interface PerformanceRepository extends JpaRepository<Performance, Long> 
       AND (:category IS NULL OR p.category = :category)
       AND (:keyword IS NULL OR LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')))
       AND (:lastId IS NULL OR p.id < :lastId)
-    ORDER BY p.createdAt DESC
+    ORDER BY p.createdAt DESC, p.id DESC
 """)
-  Page<Performance> findLatestPerformances(@Param("event") Event event,
+  List<Performance> findLatestPerformances(@Param("event") Event event,
                                      @Param("category") Category category,
                                      @Param("keyword") String keyword,
                                      @Param("lastId") Long lastId,
                                      Pageable pageable);
+  @Query("""
+    SELECT p FROM Performance p
+    WHERE (:event IS NULL OR p.type = :event)
+      AND (:category IS NULL OR p.category = :category)
+      AND (:keyword IS NULL OR LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')))
+      AND (:lastId IS NULL OR p.id > :lastId)
+    ORDER BY p.createdAt ASC, p.id ASC
+""")
+  List<Performance> findOldestPerformances(@Param("event") Event event,
+                                           @Param("category") Category category,
+                                           @Param("keyword") String keyword,
+                                           @Param("lastId") Long lastId,
+                                           Pageable pageable);
+
+  @Query("""
+    SELECT p
+    FROM Performance p
+    LEFT JOIN PerformanceLike pl ON p.id = pl.performance.id
+    WHERE (:event IS NULL OR p.type = :event)
+      AND (:category IS NULL OR p.category = :category)
+      AND (:keyword IS NULL OR LOWER(p.title) LIKE LOWER(CONCAT('%', :keyword, '%')))
+    GROUP BY p.id
+    HAVING (
+        (:lastLikeCount IS NULL OR COUNT(pl.id) < :lastLikeCount)
+        OR (COUNT(pl.id) = :lastLikeCount AND p.id < :lastId)
+    )
+    ORDER BY COUNT(pl.id) DESC, p.id DESC
+""")
+  List<Performance> findPopularPerformances(@Param("event") Event event,
+                                            @Param("category") Category category,
+                                            @Param("keyword") String keyword,
+                                            @Param("lastLikeCount") Long lastLikeCount,
+                                            @Param("lastId") Long lastId,
+                                            Pageable pageable);
 
   @Query("""
     SELECT p
@@ -39,7 +72,7 @@ public interface PerformanceRepository extends JpaRepository<Performance, Long> 
     GROUP BY p.id
     ORDER BY COUNT(pl.id) DESC, p.id DESC
 """)
-  List<Performance> findPopularPerformances(@Param("event") Event event, Pageable pageable);
+  List<Performance> findPopularPerformancesForMain(@Param("event") Event event, Pageable pageable);
 
   @Query("""
     SELECT p
@@ -59,4 +92,5 @@ public interface PerformanceRepository extends JpaRepository<Performance, Long> 
     ORDER BY function('RAND')
 """)
   List<Performance> findRandomPerformances(Event event, Pageable pageable);
+
 }

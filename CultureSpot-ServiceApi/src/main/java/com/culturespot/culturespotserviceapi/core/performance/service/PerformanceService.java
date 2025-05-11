@@ -6,7 +6,6 @@ import com.culturespot.culturespotdomain.core.performance.repository.Performance
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotserviceapi.core.performance.dto.response.*;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,10 +24,22 @@ public class PerformanceService {
     public PerformanceListResponse getPerformances(User user, Event event, Category category, Sort sort, int size, Long lastId, String keyword){
 
         Pageable pageable = PageRequest.of(0, size);
-        Page<Performance> performances = performanceRepository.findLatestPerformances(event, category, keyword, lastId, pageable);
+        List<Performance> performances = Collections.emptyList();
+        Long lastLikeCount = null; // 이전 페이지 마지막 이벤트의 좋아요 수(인기순 정렬에 필요)
+
+        switch (sort != null ? sort : Sort.LATEST){
+            case LATEST -> performances = performanceRepository.findLatestPerformances(event, category, keyword, lastId, pageable);
+            case OLDEST -> performances = performanceRepository.findOldestPerformances(event, category, keyword, lastId, pageable);
+            case POPULAR -> {
+                if (lastId != null) {
+                    lastLikeCount = likeRepository.countByPerformanceId(lastId);
+                }
+                performances = performanceRepository.findPopularPerformances(event, category, keyword, lastLikeCount, lastId, pageable);
+            }
+        }
 
         Set<Long> likedIds = getLikedPerformanceIds(user);
-        List<PerformanceResponse> responses = mapToResponseList(performances.getContent(), likedIds);
+        List<PerformanceResponse> responses = mapToResponseList(performances, likedIds);
 
         long newLastId = responses.isEmpty() ? 0 : responses.get(responses.size() - 1).id();
         return new PerformanceListResponse(responses, responses.size(), newLastId);
@@ -37,7 +48,7 @@ public class PerformanceService {
 
     public PerformanceListSimpleResponse getPopularPerformances(User user, Event event){
         Pageable pageable = PageRequest.of(0, 20);
-        List<Performance> performances = performanceRepository.findPopularPerformances(event, pageable);
+        List<Performance> performances = performanceRepository.findPopularPerformancesForMain(event, pageable);
 
         Set<Long> likedIds = getLikedPerformanceIds(user);
         List<PerformanceResponse> responses = mapToResponseList(performances, likedIds);
@@ -73,7 +84,7 @@ public class PerformanceService {
         boolean liked = likedIds.contains(performance.getId());
 
         // 총 좋아요 수
-        int likeCount = likeRepository.countByPerformanceId(performance.getId());
+        Long likeCount = likeRepository.countByPerformanceId(performance.getId());
 
         PerformanceDetail detail = new PerformanceDetail(
                 performance.getId(),

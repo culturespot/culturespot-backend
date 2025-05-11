@@ -21,6 +21,6 @@ public record PerformanceDetail(
         String url,
         String imageUrl,
         boolean liked,
-        int likeCount
+        Long likeCount
 ) {
 }

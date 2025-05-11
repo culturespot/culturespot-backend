@@ -31,5 +31,5 @@ public interface PerformanceLikeRepository extends JpaRepository<PerformanceLike
     FROM PerformanceLike pl
     WHERE pl.performance.id = :performanceId
 """)
-    int countByPerformanceId(@Param("performanceId") Long performanceId);
+    Long countByPerformanceId(@Param("performanceId") Long performanceId);
 }

@@ -5,6 +5,7 @@ import com.culturespot.culturespotdomain.core.notification.service.NotificationS
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotserviceapi.core.auth.annotation.Auth;
 import com.culturespot.culturespotserviceapi.core.auth.annotation.MemberOnly;
+import com.culturespot.culturespotserviceapi.core.notification.controller.spec.NotificationControllerSpec;
 import com.culturespot.culturespotserviceapi.core.notification.dto.response.NotificationResponse;
 import com.culturespot.culturespotserviceapi.core.notification.dto.response.NotificationResponse.NotificationResponseItem;
 import com.culturespot.culturespotserviceapi.core.notification.mapper.NotificationMapper;
@@ -27,13 +28,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Validated
 @RestController
-public class NotificationController {
+public class NotificationController implements NotificationControllerSpec {
 
   private final NotificationService service;
   private final NotificationMapper mapper;
 
   @MemberOnly
   @GetMapping(value = "/api/users/notifications")
+  @Override
   public NotificationResponse getNotifications(
       @PositiveOrZero
       @RequestParam(required = false, defaultValue = "1") Long page,
@@ -62,6 +64,7 @@ public class NotificationController {
 
   @MemberOnly
   @PutMapping(value = "/api/users/notifications/{notificationId}/read")
+  @Override
   public NotificationResponse.NotificationResponseItem readNotification(
       @PathVariable Long notificationId, @Auth User user) {
     log.info("NotificationController get request to read notification. `notificationId`: {}",
@@ -76,6 +79,7 @@ public class NotificationController {
 
   @MemberOnly
   @PutMapping(value = "/api/users/notifications/read-all")
+  @Override
   public List<NotificationResponse.NotificationResponseItem> readWholeNotifications(
       @Auth User user) {
     log.info("NotificationController get request to read whole notifications.");

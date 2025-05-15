@@ -73,12 +73,8 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     protected String determineTargetUrl(HttpServletRequest request) {
-        String redirectUri = request.getParameter("redirect_uri");
-        if (redirectUri != null && !redirectUri.isBlank()) {
-            return redirectUri;
-        }
-
-        // 수정 필요
-        return "";
+        return CookieUtils.getCookie(request, "redirect_uri")
+                .map(Cookie::getValue)
+                .orElse("http://localhost:3000"); // fallback 기본 주소
     }
 }

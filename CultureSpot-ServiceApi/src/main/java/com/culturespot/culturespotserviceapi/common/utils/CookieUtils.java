@@ -1,7 +1,11 @@
 package com.culturespot.culturespotserviceapi.common.utils;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+
+import java.util.Arrays;
+import java.util.Optional;
 
 public class CookieUtils {
 
@@ -15,11 +19,10 @@ public class CookieUtils {
      */
     public static Cookie createSecureCookie(String name, String value, int maxAge) {
         Cookie cookie = new Cookie(name, value);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
         cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(false); // HTTPS 환경에서만 동작 (로컬 개발 시 false 가능)
         cookie.setMaxAge(maxAge);
-
         return cookie;
     }
 
@@ -30,5 +33,13 @@ public class CookieUtils {
         cookie.setHttpOnly(true);  // XSS 방지를 위해 HttpOnly 설정
         cookie.setSecure(true);  // HTTPS 환경에서만 전송되도록 설정 (필요 시 제거)
         return cookie;
+    }
+
+    public static Optional<Cookie> getCookie(HttpServletRequest request, String name) {
+        if (request.getCookies() == null) return Optional.empty();
+
+        return Arrays.stream(request.getCookies())
+                .filter(cookie -> cookie.getName().equals(name))
+                .findFirst();
     }
 }

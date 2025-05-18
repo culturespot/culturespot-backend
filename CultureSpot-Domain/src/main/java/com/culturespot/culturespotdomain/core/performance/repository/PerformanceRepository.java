@@ -3,12 +3,14 @@ package com.culturespot.culturespotdomain.core.performance.repository;
 import com.culturespot.culturespotdomain.core.performance.entity.Category;
 import com.culturespot.culturespotdomain.core.performance.entity.Event;
 import com.culturespot.culturespotdomain.core.performance.entity.Performance;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.util.Set;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -30,4 +32,7 @@ public interface PerformanceRepository extends JpaRepository<Performance, Long> 
                                      @Param("keyword") String keyword,
                                      @Param("lastId") Long lastId,
                                      Pageable pageable);
+
+  List<Performance> findAllByUpdatedAtAfterAndCategoryIsIn(LocalDateTime updatedAt,
+      Set<Category> categories);
 }

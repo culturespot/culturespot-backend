@@ -21,7 +21,10 @@ public enum DomainExceptionCode {
     FILE_DELETE_FAIL(STORAGE.code + 3, "파일 삭제에 실패했습니다. 관리자에게 문의하세요."),
 
     CATEGORY(1300),
-    CATEGORY_NOT_FOUND(CATEGORY.code + 1, "요청하신 관심 카테고리를 찾을 수 없습니다.");
+    CATEGORY_NOT_FOUND(CATEGORY.code + 1, "요청하신 관심 카테고리를 찾을 수 없습니다."),
+
+    NOTIFICATION(4000),
+    NOTIFICATION_EDIT_PERMISSION_DENIED(NOTIFICATION.code + 1, "알림을 수정할 권한이 없습니다.");
 
 
     private final int code;

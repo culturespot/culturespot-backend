@@ -1,5 +1,6 @@
 package com.culturespot.culturespotserviceapi.core.auth.aspect;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.springframework.security.core.Authentication;
@@ -7,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Aspect
 @Component
 public class MemberOnlyAspect {
@@ -16,12 +18,15 @@ public class MemberOnlyAspect {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication == null || !authentication.isAuthenticated()) {
+            log.debug("Authentication does not exist.");
             throw new SecurityException("인증된 사용자만 접근 가능합니다.");
         }
 
         if (authentication.getPrincipal() instanceof UserDetails userDetails) {
             if (!userDetails.getAuthorities().stream()
                     .anyMatch(auth -> auth.getAuthority().equals("ROLE_USER"))) {
+
+                log.debug("Only member can access.");
                 throw new SecurityException("회원만 접근 가능합니다.");
             }
         } else {

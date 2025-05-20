@@ -3,14 +3,13 @@ package com.culturespot.culturespotserviceapi.core.ticket.controller;
 import com.culturespot.culturespotdomain.core.ticket.entity.TicketSort;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotserviceapi.core.auth.annotation.Auth;
+import com.culturespot.culturespotserviceapi.core.ticket.dto.response.TicketDetailResponse;
+import com.culturespot.culturespotserviceapi.core.ticket.dto.response.TicketResponse;
 import com.culturespot.culturespotserviceapi.core.ticket.service.TicketService;
 import com.culturespot.culturespotserviceapi.core.ticket.dto.response.TicketListResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/ticketbook")
@@ -28,5 +27,15 @@ public class TicketController {
             @RequestParam(required = false) String keyword
     ) {
         return ticketService.getTickets(user, sort, year, rating, keyword);
+    }
+
+    @GetMapping("/{ticketId}")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public TicketResponse getTicket(
+            @Auth User user,
+            @PathVariable Long ticketId
+    ) {
+        TicketDetailResponse detail = ticketService.getTicket(user, ticketId);
+        return new TicketResponse(detail);
     }
 }

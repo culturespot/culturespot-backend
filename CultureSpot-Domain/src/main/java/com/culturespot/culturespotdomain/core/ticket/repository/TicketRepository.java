@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
     @Query("""
@@ -26,5 +27,14 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
                                      @Param("rating") Integer rating,
                                      @Param("keyword") String keyword,
                                      @Param("sort") String sort
+    );
+
+    @Query("""
+    SELECT t FROM Ticket t
+    JOIN FETCH t.performance p
+    WHERE t.id = :ticketId AND t.user.id = :userId
+""")
+    Optional<Ticket> findByIdAndUserId(@Param("ticketId") Long ticketId,
+                                       @Param("userId") Long userId
     );
 }

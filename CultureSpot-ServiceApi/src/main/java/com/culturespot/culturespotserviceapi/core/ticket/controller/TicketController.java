@@ -3,6 +3,8 @@ package com.culturespot.culturespotserviceapi.core.ticket.controller;
 import com.culturespot.culturespotdomain.core.ticket.entity.TicketSort;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotserviceapi.core.auth.annotation.Auth;
+import com.culturespot.culturespotserviceapi.core.ticket.dto.request.TicketCreateWrapper;
+import com.culturespot.culturespotserviceapi.core.ticket.dto.response.TicketCreateResponse;
 import com.culturespot.culturespotserviceapi.core.ticket.dto.response.TicketDetailResponse;
 import com.culturespot.culturespotserviceapi.core.ticket.dto.response.TicketResponse;
 import com.culturespot.culturespotserviceapi.core.ticket.service.TicketService;
@@ -37,5 +39,14 @@ public class TicketController {
     ) {
         TicketDetailResponse detail = ticketService.getTicket(user, ticketId);
         return new TicketResponse(detail);
+    }
+
+    @PostMapping
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public TicketCreateResponse createTicket(
+            @Auth User user,
+            @RequestBody TicketCreateWrapper requestWrapper
+            ) {
+        return ticketService.createTicket(user, requestWrapper.ticket());
     }
 }

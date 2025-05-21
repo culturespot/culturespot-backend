@@ -1,14 +1,13 @@
 package com.culturespot.culturespotserviceapi.core.ticket.service;
 
 import com.culturespot.culturespotdomain.core.performance.entity.Performance;
+import com.culturespot.culturespotdomain.core.performance.repository.PerformanceRepository;
 import com.culturespot.culturespotdomain.core.ticket.entity.Ticket;
 import com.culturespot.culturespotdomain.core.ticket.entity.TicketSort;
 import com.culturespot.culturespotdomain.core.ticket.repository.TicketRepository;
 import com.culturespot.culturespotdomain.core.user.entity.User;
-import com.culturespot.culturespotserviceapi.core.ticket.dto.response.PerformanceInfoResponse;
-import com.culturespot.culturespotserviceapi.core.ticket.dto.response.TicketDetailResponse;
-import com.culturespot.culturespotserviceapi.core.ticket.dto.response.TicketListResponse;
-import com.culturespot.culturespotserviceapi.core.ticket.dto.response.TicketSummaryResponse;
+import com.culturespot.culturespotserviceapi.core.ticket.dto.request.TicketCreateRequest;
+import com.culturespot.culturespotserviceapi.core.ticket.dto.response.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +20,7 @@ import java.util.NoSuchElementException;
 public class TicketService {
 
     private final TicketRepository ticketRepository;
+    private final PerformanceRepository performanceRepository;
 
     public TicketListResponse getTickets(User user, TicketSort sort, Integer year, Integer rating, String keyword) {
 
@@ -77,5 +77,24 @@ public class TicketService {
                     p.getPerformanceInfo().getImageUrl()
                 )
         );
+    }
+
+    public TicketCreateResponse createTicket(User user, TicketCreateRequest request) {
+        Performance performance = performanceRepository.findById(request.eventId())
+                .orElseThrow(() -> new NoSuchElementException("해당 공연이 존재하지 않습니다."));
+
+        Ticket ticket = new Ticket();
+        ticket.setUser(user);
+        ticket.setPerformance(performance);
+        ticket.setStartDate(request.startDate());
+        ticket.setEndDate(request.endDate());
+        ticket.setRating(request.rating());
+        ticket.setTicketTitle(request.title());
+        ticket.setContent(request.content());
+
+        Ticket savedTicket = ticketRepository.save(ticket);
+
+        return new TicketCreateResponse(savedTicket.getId());
+
     }
 }

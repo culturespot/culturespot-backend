@@ -23,6 +23,9 @@ public enum DomainExceptionCode {
     CATEGORY(1300),
     CATEGORY_NOT_FOUND(CATEGORY.code + 1, "요청하신 관심 카테고리를 찾을 수 없습니다."),
 
+    USER(1400),
+    USER_NOT_FOUND(USER.code + 1, "사용자를 찾을 수 없습니다."),
+
     NOTIFICATION(4000),
     NOTIFICATION_EDIT_PERMISSION_DENIED(NOTIFICATION.code + 1, "알림을 수정할 권한이 없습니다.");
 

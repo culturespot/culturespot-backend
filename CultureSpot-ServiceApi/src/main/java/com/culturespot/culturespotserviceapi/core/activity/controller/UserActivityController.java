@@ -2,6 +2,7 @@ package com.culturespot.culturespotserviceapi.core.activity.controller;
 
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotserviceapi.core.activity.dto.response.UserCommentResponse;
+import com.culturespot.culturespotserviceapi.core.activity.dto.response.UserPostResponse;
 import com.culturespot.culturespotserviceapi.core.activity.service.UserActivityService;
 import com.culturespot.culturespotserviceapi.core.auth.annotation.Auth;
 import com.culturespot.culturespotserviceapi.core.performance.dto.response.PerformanceResponse;
@@ -32,5 +33,11 @@ public class UserActivityController {
     public Map<String, List<UserCommentResponse>> getUserComments(@Auth User user) {
         List<UserCommentResponse> responses = userActivityService.getUserComments(user);
         return Map.of("userComments", responses);
+    }
+
+    @GetMapping("/posts")
+    public Map<String, List<UserPostResponse>> getUserPosts(@Auth User user) {
+        List<UserPostResponse> responses = userActivityService.getUserPosts(user);
+        return Map.of("userPosts", responses);
     }
 }

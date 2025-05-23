@@ -7,9 +7,11 @@ import com.culturespot.culturespotdomain.core.ticket.entity.TicketSort;
 import com.culturespot.culturespotdomain.core.ticket.repository.TicketRepository;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotserviceapi.core.ticket.dto.request.TicketCreateRequest;
+import com.culturespot.culturespotserviceapi.core.ticket.dto.request.TicketUpdateRequest;
 import com.culturespot.culturespotserviceapi.core.ticket.dto.response.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
 import java.util.List;
@@ -79,6 +81,7 @@ public class TicketService {
         );
     }
 
+    @Transactional
     public TicketCreateResponse createTicket(User user, TicketCreateRequest request) {
         Performance performance = performanceRepository.findById(request.eventId())
                 .orElseThrow(() -> new NoSuchElementException("해당 공연이 존재하지 않습니다."));
@@ -96,5 +99,19 @@ public class TicketService {
 
         return new TicketCreateResponse(savedTicket.getId());
 
+    }
+
+    @Transactional
+    public TicketCreateResponse updateTicket(User user, Long ticketId, TicketUpdateRequest request) {
+        Ticket ticket = ticketRepository.findByIdAndUserId(ticketId, user.getId())
+                .orElseThrow(() -> new NoSuchElementException("해당 티켓이 존재하지 않습니다."));
+
+        ticket.setStartDate(request.startDate());
+        ticket.setEndDate(request.endDate());
+        ticket.setRating(request.rating());
+        ticket.setTicketTitle(request.title());
+        ticket.setContent(request.content());
+
+        return new TicketCreateResponse(ticket.getId());
     }
 }

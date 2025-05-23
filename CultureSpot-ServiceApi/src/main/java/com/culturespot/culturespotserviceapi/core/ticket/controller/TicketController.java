@@ -4,6 +4,7 @@ import com.culturespot.culturespotdomain.core.ticket.entity.TicketSort;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotserviceapi.core.auth.annotation.Auth;
 import com.culturespot.culturespotserviceapi.core.ticket.dto.request.TicketCreateWrapper;
+import com.culturespot.culturespotserviceapi.core.ticket.dto.request.TicketUpdateWrapper;
 import com.culturespot.culturespotserviceapi.core.ticket.dto.response.TicketCreateResponse;
 import com.culturespot.culturespotserviceapi.core.ticket.dto.response.TicketDetailResponse;
 import com.culturespot.culturespotserviceapi.core.ticket.dto.response.TicketResponse;
@@ -16,10 +17,10 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/ticketbook")
 @RequiredArgsConstructor
+@PreAuthorize("hasAuthority('ROLE_USER')")
 public class TicketController {
     private final TicketService ticketService;
 
-    @PreAuthorize("hasAuthority('ROLE_USER')")
     @GetMapping
     public TicketListResponse getTickets(
             @Auth User user,
@@ -32,7 +33,6 @@ public class TicketController {
     }
 
     @GetMapping("/{ticketId}")
-    @PreAuthorize("hasAuthority('ROLE_USER')")
     public TicketResponse getTicket(
             @Auth User user,
             @PathVariable Long ticketId
@@ -42,11 +42,19 @@ public class TicketController {
     }
 
     @PostMapping
-    @PreAuthorize("hasAuthority('ROLE_USER')")
     public TicketCreateResponse createTicket(
             @Auth User user,
             @RequestBody TicketCreateWrapper requestWrapper
             ) {
         return ticketService.createTicket(user, requestWrapper.ticket());
+    }
+
+    @PutMapping("/{ticketId}")
+    public TicketCreateResponse updateTicket(
+            @Auth User user,
+            @PathVariable Long ticketId,
+            @RequestBody TicketUpdateWrapper requestWrapper
+            ) {
+        return ticketService.updateTicket(user, ticketId, requestWrapper.ticket());
     }
 }

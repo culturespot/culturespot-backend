@@ -114,4 +114,11 @@ public class TicketService {
 
         return new TicketCreateResponse(ticket.getId());
     }
+
+    @Transactional
+    public void deleteTicket(User user, Long ticketId) {
+        Ticket ticket = ticketRepository.findByIdAndUserId(ticketId, user.getId())
+                .orElseThrow(() -> new NoSuchElementException("해당 티켓이 존재하지 않습니다."));
+        ticketRepository.delete(ticket);
+    }
 }

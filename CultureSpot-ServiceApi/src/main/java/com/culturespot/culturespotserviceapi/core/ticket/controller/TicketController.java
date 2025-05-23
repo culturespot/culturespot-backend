@@ -57,4 +57,12 @@ public class TicketController {
             ) {
         return ticketService.updateTicket(user, ticketId, requestWrapper.ticket());
     }
+
+    @DeleteMapping("/{ticketId}")
+    public void deleteTicket(
+            @Auth User user,
+            @PathVariable Long ticketId
+            ) {
+        ticketService.deleteTicket(user, ticketId);
+    }
 }

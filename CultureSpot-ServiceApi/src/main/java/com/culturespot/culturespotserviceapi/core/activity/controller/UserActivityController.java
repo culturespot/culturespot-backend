@@ -1,7 +1,7 @@
-package com.culturespot.culturespotserviceapi.activity.controller;
+package com.culturespot.culturespotserviceapi.core.activity.controller;
 
 import com.culturespot.culturespotdomain.core.user.entity.User;
-import com.culturespot.culturespotserviceapi.activity.service.UserActivityService;
+import com.culturespot.culturespotserviceapi.core.activity.service.UserActivityService;
 import com.culturespot.culturespotserviceapi.core.auth.annotation.Auth;
 import com.culturespot.culturespotserviceapi.core.performance.dto.response.PerformanceResponse;
 import lombok.RequiredArgsConstructor;

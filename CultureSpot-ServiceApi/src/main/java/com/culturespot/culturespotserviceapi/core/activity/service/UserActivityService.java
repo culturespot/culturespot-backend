@@ -1,4 +1,4 @@
-package com.culturespot.culturespotserviceapi.activity.service;
+package com.culturespot.culturespotserviceapi.core.activity.service;
 
 import com.culturespot.culturespotdomain.core.performance.entity.Performance;
 import com.culturespot.culturespotdomain.core.user.entity.User;

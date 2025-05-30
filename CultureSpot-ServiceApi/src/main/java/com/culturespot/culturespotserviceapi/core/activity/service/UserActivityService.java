@@ -3,6 +3,7 @@ package com.culturespot.culturespotserviceapi.core.activity.service;
 import com.culturespot.culturespotdomain.core.comment.entity.Comment;
 import com.culturespot.culturespotdomain.core.comment.repository.CommentRepository;
 import com.culturespot.culturespotdomain.core.community.domain.entity.Post;
+import com.culturespot.culturespotdomain.core.community.infrastructure.persistence.PostLikeRepository;
 import com.culturespot.culturespotdomain.core.community.infrastructure.persistence.PostRepository;
 import com.culturespot.culturespotdomain.core.performance.entity.Performance;
 import com.culturespot.culturespotdomain.core.performance.repository.PerformanceLikeRepository;
@@ -22,8 +23,8 @@ public class UserActivityService {
 
     private final PerformanceLikeRepository likeRepository;
     private final CommentRepository commentRepository;
-
     private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
 
     public List<PerformanceResponse> getLikedPerformances(User user) {
 
@@ -75,6 +76,28 @@ public class UserActivityService {
                             p.getUser().getId(),
                             p.getUser().getNickname(),
                             p.getUser().getProfileCode()
+                        ),
+                        p.getViewCount().intValue(),
+                        p.getPostLikes() != null ? p.getPostLikes().size() : 0,
+                        p.getPostComments() != null ? p.getPostComments().size() : 0,
+                        p.getCreatedAt(),
+                        p.getUpdatedAt()
+                ))
+                .toList();
+    }
+
+    public List<UserPostResponse> getLikedPosts(User user) {
+        List<Post> posts = postLikeRepository.findLikedPostsByUserId(user.getId());
+
+        return posts.stream()
+                .map(p -> new UserPostResponse(
+                        p.getId(),
+                        p.getTitle(),
+                        p.getContent(),
+                        new UserPostResponse.AuthorInfo(
+                                p.getUser().getId(),
+                                p.getUser().getNickname(),
+                                p.getUser().getProfileCode()
                         ),
                         p.getViewCount().intValue(),
                         p.getPostLikes() != null ? p.getPostLikes().size() : 0,

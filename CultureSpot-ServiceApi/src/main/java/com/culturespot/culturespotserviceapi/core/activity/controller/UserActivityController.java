@@ -40,4 +40,11 @@ public class UserActivityController {
         List<UserPostResponse> responses = userActivityService.getUserPosts(user);
         return Map.of("userPosts", responses);
     }
+
+    @GetMapping("/liked-posts")
+    public Map<String, List<UserPostResponse>> getLikedPosts(@Auth User user) {
+        List<UserPostResponse> responses = userActivityService.getLikedPosts(user);
+        return Map.of("likedPosts", responses);
+    }
+
 }

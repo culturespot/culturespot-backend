@@ -3,6 +3,7 @@ package com.culturespot.culturespotserviceapi.common.utils;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseCookie;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -24,6 +25,21 @@ public class CookieUtils {
         cookie.setSecure(false); // HTTPS 환경에서만 동작 (로컬 개발 시 false 가능)
         cookie.setMaxAge(maxAge);
         return cookie;
+    }
+
+    /**
+     * ✅ ResponseCookie를 사용한 새로운 메소드 (SameSite 지원)
+     */
+    public static void addSecureCookieToResponse(HttpServletResponse response, String name, String value, int maxAge) {
+        ResponseCookie cookie = ResponseCookie.from(name, value)
+                .path("/")
+                .httpOnly(true)
+                .secure(false) // 로컬 개발용 (프로덕션에서는 true)
+                .maxAge(maxAge)
+                .sameSite("Lax") // ✅ 이 부분이 핵심!
+                .build();
+
+        response.addHeader("Set-Cookie", cookie.toString());
     }
 
     public static Cookie deleteCookie(String name) {

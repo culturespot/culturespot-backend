@@ -45,36 +45,48 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
             Authentication authentication
     ) throws IOException {
 
+        // === 디버깅 추가 ===
+        System.out.println("=== OAuth2 인증 성공 디버깅 ===");
+        Cookie[] cookies = request.getCookies();
+        System.out.println("받은 쿠키 개수: " + (cookies != null ? cookies.length : 0));
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                System.out.println("쿠키: " + cookie.getName() + " = " + cookie.getValue());
+            }
+        }
+
         if (!(authentication instanceof OAuth2AuthenticationToken oauthToken)) return;
 
-        String registrationId = oauthToken.getAuthorizedClientRegistrationId(); // 소셜 로그인 제공자 가져오기
-        String email = authentication.getName(); // 사용자 이메일 가져오기
+        String registrationId = oauthToken.getAuthorizedClientRegistrationId();
+        String email = authentication.getName();
 
-        // ✅ JWT 토큰 발급
         String accessToken = jwtTokenManager.createAccessToken(email, Set.of("ROLE_USER"));
         String refreshToken = jwtTokenManager.createRefreshToken(email);
 
-        response.setHeader("Authorization", "Bearer " + accessToken); // access token 헤더에 추가
+        response.setHeader("Authorization", "Bearer " + accessToken);
 
-        // ✅ Refresh Token을 HttpOnly & Secure 쿠키에 저장
-        Cookie refreshTokenCookie = CookieUtils.createSecureCookie(
-                "refreshToken", refreshToken, REFRESH_TOKEN_EXPIRATION
-        );
-        response.addCookie(refreshTokenCookie);
+        // ✅ 새로운 메소드 사용
+        CookieUtils.addSecureCookieToResponse(response, "refreshToken", refreshToken, REFRESH_TOKEN_EXPIRATION);
 
-        // ✅ refreshToken db 저장 (SocialLoginType 포함)
-        refreshTokenService.saveRefreshToken(email,  SocialLoginType.fromRegistrationId(registrationId), refreshToken);
+        refreshTokenService.saveRefreshToken(email, SocialLoginType.fromRegistrationId(registrationId), refreshToken);
 
-        // ✅ 최신 로그인 시간 업데이트
         LoginSuccessResponse responseDto = oAuth2LoginSuccessHandler.handle(registrationId, email);
 
         String targetUrl = determineTargetUrl(request);
+        System.out.println("최종 리다이렉트 URL: " + targetUrl);
+
         getRedirectStrategy().sendRedirect(request, response, targetUrl);
     }
 
     protected String determineTargetUrl(HttpServletRequest request) {
-        return CookieUtils.getCookie(request, "redirect_uri")
+        String redirectUri = CookieUtils.getCookie(request, "redirect_uri")
                 .map(Cookie::getValue)
-                .orElse("http://localhost:3000"); // fallback 기본 주소
+                .orElse("http://localhost:3000");
+
+        // 로그 추가
+        System.out.println("쿠키에서 받아온 소셜로그인 리다이렉트 URI: " + redirectUri);
+
+        return redirectUri;
+
     }
 }

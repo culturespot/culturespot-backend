@@ -4,6 +4,8 @@ import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotserviceapi.common.security.endpoint.EndpointType;
 import com.culturespot.culturespotserviceapi.core.auth.annotation.Auth;
 import com.culturespot.culturespotserviceapi.core.performance.service.PerformanceLikeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
 
+@Tag(name = "이벤트 좋아요 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping(EndpointType.USER_PATH + "/events")
@@ -18,6 +21,7 @@ public class PerformanceLikeController {
 
     private final PerformanceLikeService likeService;
 
+    @Operation(summary = "이벤트 좋아요 추가")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @PostMapping("/{eventId}/like")
     public ResponseEntity<?> like(@Auth User user, @PathVariable Long eventId){
@@ -25,6 +29,7 @@ public class PerformanceLikeController {
         return ResponseEntity.ok(Map.of("liked", true));
     }
 
+    @Operation(summary = "이벤트 좋아요 삭제")
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @DeleteMapping("/{eventId}/like")
     public ResponseEntity<?> unlike(@Auth User user, @PathVariable Long eventId){

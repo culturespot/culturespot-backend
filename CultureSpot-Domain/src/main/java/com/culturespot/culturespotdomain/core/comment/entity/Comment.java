@@ -1,7 +1,8 @@
 package com.culturespot.culturespotdomain.core.comment.entity;
 
+import com.culturespot.culturespotdomain.core.community.domain.entity.Post;
 import com.culturespot.culturespotdomain.core.global.entity.BaseEntity;
-import com.culturespot.culturespotdomain.core.post.entity.Post;
+//import com.culturespot.culturespotdomain.core.post.entity.Post;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;

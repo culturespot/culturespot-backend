@@ -1,5 +1,12 @@
 package com.culturespot.culturespotserviceapi.unit.auth;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.culturespot.culturespotdomain.core.global.exception.AuthException;
 import com.culturespot.culturespotdomain.core.role.entity.Role;
 import com.culturespot.culturespotdomain.core.role.entity.UserRoleType;
@@ -8,6 +15,8 @@ import com.culturespot.culturespotdomain.core.user.entity.UserRole;
 import com.culturespot.culturespotdomain.core.user.repository.UserRepository;
 import com.culturespot.culturespotserviceapi.core.auth.resolver.AuthArgumentResolver;
 import com.culturespot.culturespotserviceapi.core.auth.userInfo.CustomUserDetails;
+import java.util.HashSet;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,19 +24,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.core.MethodParameter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.ModelAndViewContainer;
-import org.springframework.core.MethodParameter;
-
-import java.util.HashSet;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 //  Mockito 테스트 환경 설정
 @ExtendWith(MockitoExtension.class)
@@ -60,7 +63,7 @@ class AuthArgumentResolverTest {
         // User 객체 생성 (초기 빈 roles Set 할당)
         user = User.builder()
                 .email("testUser@gmail.com")
-                .password("password")
+//                .password("password")
                 .roles(new HashSet<>())
                 .build();
 

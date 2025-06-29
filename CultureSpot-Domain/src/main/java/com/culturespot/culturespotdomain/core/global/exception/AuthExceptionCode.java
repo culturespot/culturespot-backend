@@ -26,7 +26,7 @@ public enum AuthExceptionCode {
 
     AUTHENTICATION(700),
     CANCELLED_AUTHENTICATION(AUTHENTICATION.code + 1, "사용자가 회원가입 또는 로그인을 취소했습니다."),
-    INVALID_AUTHENTICATION(USER.code + 2, "잘못된 인증 정보입니다."),
+    INVALID_AUTHENTICATION(AUTHENTICATION.code + 2, "잘못된 인증 정보입니다."),
 
 
     LOGIN(600),

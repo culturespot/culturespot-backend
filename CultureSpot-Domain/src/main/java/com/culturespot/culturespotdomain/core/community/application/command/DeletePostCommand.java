@@ -1,0 +1,9 @@
+package com.culturespot.culturespotdomain.core.community.application.command;
+
+import com.culturespot.culturespotdomain.core.user.entity.User;
+
+public record DeletePostCommand(
+        User user,
+        Long postId
+) {
+}

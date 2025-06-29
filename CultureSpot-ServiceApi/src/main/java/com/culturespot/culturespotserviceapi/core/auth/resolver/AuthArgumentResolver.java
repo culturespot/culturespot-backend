@@ -6,6 +6,7 @@ import com.culturespot.culturespotdomain.core.user.entity.User;
 import com.culturespot.culturespotdomain.core.user.repository.UserRepository;
 import com.culturespot.culturespotserviceapi.core.auth.annotation.Auth;
 import org.springframework.core.MethodParameter;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,9 +40,14 @@ public class AuthArgumentResolver implements HandlerMethodArgumentResolver {
     ) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        if (authentication == null || !authentication.isAuthenticated()) {
-            throw new AuthException(AuthExceptionCode.UNAUTHENTICATED_USER);
+        // 비로그인 사용자의 경우 null 반환
+        if (authentication instanceof AnonymousAuthenticationToken){
+            return null;
         }
+        
+//        if (authentication == null || !authentication.isAuthenticated()) {
+//            throw new AuthException(AuthExceptionCode.UNAUTHENTICATED_USER);
+//        }
 
         // 현재 인증된 사용자가 UserDetails인지 확인
         Object principal = authentication.getPrincipal();

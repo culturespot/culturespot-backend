@@ -1,6 +1,8 @@
 package com.culturespot.culturespotdomain.core.comment.repository;
 
 import com.culturespot.culturespotdomain.core.comment.entity.Comment;
+
+import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,4 +20,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
   );
 
   Optional<Comment> findByIdAndPostId(Long commentId, Long postId);
+
+  List<Comment> findByUserIdOrderByCreatedAtDesc(Long userId);
 }

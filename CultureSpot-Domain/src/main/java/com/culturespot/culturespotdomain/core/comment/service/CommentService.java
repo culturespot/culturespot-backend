@@ -2,8 +2,10 @@ package com.culturespot.culturespotdomain.core.comment.service;
 
 import com.culturespot.culturespotdomain.core.comment.entity.Comment;
 import com.culturespot.culturespotdomain.core.comment.repository.CommentRepository;
-import com.culturespot.culturespotdomain.core.post.entity.Post;
-import com.culturespot.culturespotdomain.core.post.repository.PostRepository;
+//import com.culturespot.culturespotdomain.core.post.entity.Post;
+//import com.culturespot.culturespotdomain.core.post.repository.PostRepository;
+import com.culturespot.culturespotdomain.core.community.domain.entity.Post;
+import com.culturespot.culturespotdomain.core.community.infrastructure.persistence.PostRepository;
 import com.culturespot.culturespotdomain.core.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

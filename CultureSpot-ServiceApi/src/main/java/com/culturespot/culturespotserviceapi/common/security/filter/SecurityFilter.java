@@ -61,7 +61,13 @@ public class SecurityFilter {
                             "/swagger-ui/index.html",
                             "/v3/api-docs/swagger-config"
                     ).permitAll();
+
+                    auth.requestMatchers("/api/events/popular").permitAll();  // 실시간 인기 이벤트
+                    auth.requestMatchers("/api/events").permitAll();          // 최신 이벤트
+                    auth.requestMatchers("/api/events/**").permitAll();       // 이벤트 상세 정보
+                  
                     auth.requestMatchers("/login/redirect").permitAll();
+
                     auth.requestMatchers(EndpointType.PUBLIC.getPath()).permitAll();
                     auth.requestMatchers(EndpointType.USER.getPath()).authenticated();
                     auth.requestMatchers(EndpointType.ADMIN.getPath()).hasRole("ADMIN");
